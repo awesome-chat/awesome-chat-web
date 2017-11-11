@@ -1,17 +1,18 @@
 const Koa = require('koa');
-const config = require('../config/server');
+const config = require('../config/default');
+const router = require('./router');
 const app = new Koa();
 
-// response
-app.use(async (ctx, next) => {
-  ctx.body = "Hello world";
-});
-app.listen(config.port);
+
+app.use(router.routes())
+
+require('../config/devserver')()
+
+app.listen(config.port)
 
 // delay its appearance to make sure user can notice it..
 setTimeout(() => {
   console.log('-------------------------------');
-  console.log(app)
   console.log(`app server is listening on ${config.port}`);
   console.log('-------------------------------');
 }, 1000);
