@@ -5,7 +5,9 @@
       "alias": {
         "@client": "./client",
         "@server": "./server",
-        "@config": "./config"
+        "@config": "./config",
+        "@build": "./build",
+        "@static": "./static"
       }
     }]
   ]

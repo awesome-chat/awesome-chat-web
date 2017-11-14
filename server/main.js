@@ -4,7 +4,7 @@ const fs = require('fs');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpack = require('webpack');
-const webpackConfig = require('../config/webpack.config');
+const webpackConfig = require('../config/dev.webpack.config');
 const serverHotReload = require('../tools/serverHotReload');
 
 const app = new Koa();
