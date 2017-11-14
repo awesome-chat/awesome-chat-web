@@ -3,16 +3,14 @@ const path = require('path');
 
 const __ROOT = path.resolve(__dirname, '../');
 const __NODE_MODULES = path.join(__ROOT, 'node_modules');
-const __BUILD = path.join(__ROOT, 'build');
+const __STATIC = path.join(__ROOT, 'static');
 const __CLIENT = path.join(__ROOT, 'client');
 const __SERVER = path.join(__ROOT, 'server');
 const __CONFIG = path.join(__ROOT, 'config');
 
 const baseConfig = {
   context: __ROOT,
-  entry: {
-    'commonLib': [`${__CLIENT}/index.jsx`,'webpack-hot-middleware/client'],
-  },
+  entry: path.resolve(__dirname, '../client/index.jsx'),
   module: {
     loaders: [
       {
@@ -23,10 +21,8 @@ const baseConfig = {
     ],
   },
   output: {
-    filename: '[name].js',
-    path: __BUILD,
-    publicPath: __ROOT,
-    library: '[name]'
+    path: __STATIC,
+    filename: 'index.js',
   },
   devtool: 'inline-source-map',  
   plugins: [
