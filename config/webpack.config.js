@@ -3,7 +3,7 @@ const path = require('path');
 
 const __ROOT = path.resolve(__dirname, '../');
 const __NODE_MODULES = path.join(__ROOT, 'node_modules');
-const __STATIC = path.join(__ROOT, 'static');
+const __BUILD = path.join(__ROOT, 'build');
 const __CLIENT = path.join(__ROOT, 'client');
 const __SERVER = path.join(__ROOT, 'server');
 const __CONFIG = path.join(__ROOT, 'config');
@@ -21,7 +21,8 @@ const baseConfig = {
     ],
   },
   output: {
-    path: __STATIC,
+    path: __BUILD,
+    publicPath: '/build/',
     filename: 'index.js',
   },
   devtool: 'inline-source-map',  
