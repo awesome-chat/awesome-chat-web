@@ -10,12 +10,12 @@ router.get('/', async (ctx) => {
   ctx.body = fs.readFileSync(filePath, 'utf-8');
 });
 
-router.get('/static/*', async (ctx, next) => {
+router.get('/static/*', async (ctx) => {
   const filePath = `${staticDir}${ctx.url.split('/static')[1]}`;
   ctx.body = fs.readFileSync(filePath,'utf-8');
 });
 
-router.get('/test', async (ctx, next) => {
+router.get('/test', async (ctx) => {
   ctx.body = 1111222
 });
 

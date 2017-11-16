@@ -22,11 +22,9 @@ const devMiddleware = webpackDevMiddleware(compiler, {
 });
 
 // https://github.com/glenjamin/ultimate-hot-reloading-example/issues/17
-// app.use((ctx, next) => {
-//   router.routes()(ctx, next);
-// });
-
-app.use(router.routes());
+app.use((ctx, next) => {
+  router.routes()(ctx, next);
+});
 
 app.use((ctx, next) => {
   // devMiddleware不能直接通过app.use(xxx)使用
