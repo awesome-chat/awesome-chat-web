@@ -8,13 +8,14 @@ const baseConfig = {
     main:[path.resolve(__dirname, '../client/index/index.jsx'),'webpack-hot-middleware/client'],
   },
   module: {
-    loaders: [
-      {
-        test: /\.jsx?$/,
-        loader: 'babel-loader',
-        include: [alias['@client']],
-      },
-    ],
+    loaders: [{
+      test: /\.jsx?$/,
+      include: [alias['@client']],
+      loader: 'babel-loader',
+      query: {
+        presets: ['es2015', 'react']
+      }
+    }]
   },
   output: {
     path: alias['@build'],
