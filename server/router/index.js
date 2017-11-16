@@ -1,22 +1,23 @@
-const Router = require('koa-router');
-const router = new Router();
+const express = require('express')
 const fs = require('fs');
 const path = require('path');
 
+const router = express.Router()
+
 // 静态文件
 const staticDir = path.join(__dirname, '../../static');
-router.get('/', async (ctx) => {
+router.get('/', (req, res) => {
   const filePath = `${staticDir}/index.html`;
-  ctx.body = fs.readFileSync(filePath, 'utf-8');
+  res.sendFile(filePath);
 });
 
-router.get('/static/*', async (ctx) => {
-  const filePath = `${staticDir}${ctx.url.split('/static')[1]}`;
-  ctx.body = fs.readFileSync(filePath,'utf-8');
+router.get('/static/*', (req, res) => {
+  const filePath = `${staticDir}${res.url.split('/static')[1]}`;
+  res.sendFile(filePath);
 });
 
-router.get('/test', async (ctx) => {
-  ctx.body = 1111222
+router.get('/test', (req, res) => {
+  res.body = 1111222
 });
 
 module.exports = router;

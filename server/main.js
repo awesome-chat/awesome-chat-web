@@ -1,6 +1,5 @@
-const Koa = require('koa');
+const express = require('express');
 const config = require('../config/default');
-const fs = require('fs');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpack = require('webpack');
@@ -8,7 +7,7 @@ const chokidar = require('chokidar');
 const webpackConfig = require('../config/dev.webpack.config');
 let router = require('./router');
 
-const app = new Koa();
+const app = express();
 
 const compiler = webpack(webpackConfig);
 
@@ -21,17 +20,14 @@ const devMiddleware = webpackDevMiddleware(compiler, {
   },
 });
 
-// https://github.com/glenjamin/ultimate-hot-reloading-example/issues/17
-app.use((ctx, next) => {
-  router.routes()(ctx, next);
+app.use((req, res, next) => {
+  router(req, res, next);
 });
 
-app.use((ctx, next) => {
-  // devMiddleware不能直接通过app.use(xxx)使用
-  ctx.res.statusCode = 200;
-  devMiddleware(ctx.req, ctx.res, next);
-});
-// app.use(hotMiddleware);
+app.use(devMiddleware);
+
+app.use(hotMiddleware);
+
 
 chokidar.watch(require.resolve('./router')).on('change', (path) => {
   console.log(path);

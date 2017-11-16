@@ -4,7 +4,9 @@ const { alias } = require('./default');
 
 const baseConfig = {
   context: alias['@root'],
-  entry: path.resolve(__dirname, '../client/index/index.jsx'),
+  entry: {
+    main:[path.resolve(__dirname, '../client/index/index.jsx'),'webpack-hot-middleware/client'],
+  },
   module: {
     loaders: [
       {
