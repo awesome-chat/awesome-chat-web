@@ -18,7 +18,7 @@ class App extends Component {
   render() {
     return (
       <Layout>
-        <Header className="header bg">
+        <Header className="header">
           <div className="logo" />
           <Menu
             theme="dark"
