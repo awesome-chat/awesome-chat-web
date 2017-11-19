@@ -3,6 +3,12 @@
   .ant-layout{
     height: 100%;
   }
+  .ant-layout-content{
+    min-height: auto !important;
+  }
+  .header{
+    background: #2189f7;
+  }
   .title{
     font-size: 20px;
     float: left;

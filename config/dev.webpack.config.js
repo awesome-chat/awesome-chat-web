@@ -13,7 +13,7 @@ const baseConfig = {
       include: [alias['@client']],
       loader: 'babel-loader',
       query: {
-        presets: ['es2015', 'react']
+        presets: ['es2015', 'stage-0', 'react']
       }
     },{
       test: /\.css$/,

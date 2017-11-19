@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import { Switch, Route } from 'react-router'
+import { Switch, Route } from 'react-router';
+import { Link } from 'react-router-dom';
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
-import Info from '@client/page/info/Info.jsx';
+import Company from '@client/page/company/Company.jsx';
 import './Main.css';
 
 const { SubMenu } = Menu;
@@ -16,6 +17,7 @@ const menuDataStruct = [
       {
         id: 11,
         name: '信息修改',
+        pathName: '/'
       }
     ]
   },
@@ -60,16 +62,18 @@ class App extends Component {
   }
 
   render() {
-
     const menuContent = menuDataStruct.map(d =>
       <SubMenu key={d.id} title={<span><Icon type={d.type || 'user'} />{d.name}</span>}>
-        {d.child.map(t => <Menu.Item key={t.id}>{t.name}</Menu.Item>)}
+        {d.child.map(t => <Menu.Item key={t.id}>
+          <Link to={t.pathName || '/'}>
+            {t.name}
+          </Link>
+        </Menu.Item>)}
       </SubMenu>)
 
     return (
       <Layout className="layout">
         <Header className="header">
-          <div className="logo" />
           <div className="title">
             {`Nchat内部管理系统 —— XX公司`}
           </div>
@@ -84,6 +88,7 @@ class App extends Component {
         <Layout>
           <Sider width={200} style={{ background: '#fff' }}>
             <Menu
+              theme="dark"
               mode="inline"
               defaultSelectedKeys={['1']}
               defaultOpenKeys={['sub1']}
@@ -92,15 +97,14 @@ class App extends Component {
               {menuContent}
             </Menu>
           </Sider>
-          <Layout style={{ padding: '0 24px 24px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>Home</Breadcrumb.Item>
-              <Breadcrumb.Item>List</Breadcrumb.Item>
-              <Breadcrumb.Item>App</Breadcrumb.Item>
-            </Breadcrumb>
-            <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280 }}>
+          <Layout style={{ padding: '24px' }}>
+            <Content
+              style={{
+                background: '#fff', padding: 24, margin: 0, minHeight: 280
+              }}
+            >
               <Switch>
-                <Route exact path="/" component={Info}/>
+                <Route exact path="/" component={Company} />
               </Switch>
             </Content>
           </Layout>
