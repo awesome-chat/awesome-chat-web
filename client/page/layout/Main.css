@@ -3,4 +3,32 @@
   .ant-layout{
     height: 100%;
   }
+  .title{
+    font-size: 20px;
+    float: left;
+    color: #fff;
+  }
+  .user{
+    color: #fff;
+    float: right;
+    font-size: 14px;
+    span{
+      margin-left: 5px;
+    }
+    i{
+      margin-left: 15px;
+    }
+    .status{
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+    }
+    .online{
+      background: #68d675;
+    }
+    .offline{
+      background: #da0402;
+    }
+  }
 }

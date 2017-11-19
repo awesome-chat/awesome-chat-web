@@ -7,6 +7,50 @@ import './Main.css';
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
+const menuDataStruct = [
+  {
+    id: 1,
+    name: '公司信息',
+    type: 'solution',
+    child: [
+      {
+        id: 11,
+        name: '信息修改',
+      }
+    ]
+  },
+  {
+    id: 2,
+    name: '组织架构',
+    type: 'usergroup-add',
+    child: [
+      {
+        id: 21,
+        name: '新增组织架构',
+      },
+      {
+        id: 22,
+        name: '组织架构修改',
+      }
+    ]
+  },
+  {
+    id: 3,
+    name: '考勤',
+    type: 'calendar',
+    child: [
+      {
+        id: 31,
+        name: '考勤查询',
+      },
+      {
+        id: 32,
+        name: '考勤修改',
+      }
+    ]
+  }
+]
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -16,20 +60,26 @@ class App extends Component {
   }
 
   render() {
+
+    const menuContent = menuDataStruct.map(d =>
+      <SubMenu key={d.id} title={<span><Icon type={d.type || 'user'} />{d.name}</span>}>
+        {d.child.map(t => <Menu.Item key={t.id}>{t.name}</Menu.Item>)}
+      </SubMenu>)
+
     return (
-      <Layout>
+      <Layout className="layout">
         <Header className="header">
           <div className="logo" />
-          <Menu
-            theme="dark"
-            mode="horizontal"
-            defaultSelectedKeys={['2']}
-            style={{ lineHeight: '64px' }}
-          >
-            <Menu.Item key="1">nav 1</Menu.Item>
-            <Menu.Item key="2">nav 2</Menu.Item>
-            <Menu.Item key="3">nav 3</Menu.Item>
-          </Menu>
+          <div className="title">
+            {`Nchat内部管理系统 —— XX公司`}
+          </div>
+          <div className="user">
+            <Icon type="user" />
+            <span>管理员</span>
+            <span className="status online" />
+            <Icon type="logout" />
+            <span>退出</span>
+          </div>
         </Header>
         <Layout>
           <Sider width={200} style={{ background: '#fff' }}>
@@ -39,24 +89,7 @@ class App extends Component {
               defaultOpenKeys={['sub1']}
               style={{ height: '100%', borderRight: 0 }}
             >
-              <SubMenu key="sub1" title={<span><Icon type="user" />subnav 1</span>}>
-                <Menu.Item key="1">option1</Menu.Item>
-                <Menu.Item key="2">option2</Menu.Item>
-                <Menu.Item key="3">option3</Menu.Item>
-                <Menu.Item key="4">option4</Menu.Item>
-              </SubMenu>
-              <SubMenu key="sub2" title={<span><Icon type="laptop" />subnav 2</span>}>
-                <Menu.Item key="5">option5</Menu.Item>
-                <Menu.Item key="6">option6</Menu.Item>
-                <Menu.Item key="7">option7</Menu.Item>
-                <Menu.Item key="8">option8</Menu.Item>
-              </SubMenu>
-              <SubMenu key="sub3" title={<span><Icon type="notification" />subnav 3</span>}>
-                <Menu.Item key="9">option9</Menu.Item>
-                <Menu.Item key="10">option10</Menu.Item>
-                <Menu.Item key="11">option11</Menu.Item>
-                <Menu.Item key="12">option12</Menu.Item>
-              </SubMenu>
+              {menuContent}
             </Menu>
           </Sider>
           <Layout style={{ padding: '0 24px 24px' }}>
