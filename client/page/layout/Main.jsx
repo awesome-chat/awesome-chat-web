@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Switch, Route } from 'react-router'
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import Info from '@client/page/info/Info.jsx';
+import './Main.css';
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
@@ -17,7 +18,7 @@ class App extends Component {
   render() {
     return (
       <Layout>
-        <Header className="header">
+        <Header className="header bg">
           <div className="logo" />
           <Menu
             theme="dark"

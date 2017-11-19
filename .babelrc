@@ -1,14 +1,16 @@
 {
   "plugins": [
-    ["module-resolver", {
-      "root": ["./"],
-      "alias": {
-        "@client": "./client",
-        "@server": "./server",
-        "@config": "./config",
-        "@build": "./build",
-        "@static": "./static"
+    ["module-resolver",
+      {
+        "root": ["./"],
+        "alias": {
+          "@client": "./client",
+          "@server": "./server",
+          "@config": "./config",
+          "@build": "./build",
+          "@static": "./static"
+        }
       }
-    }]
+    ]
   ]
 }
