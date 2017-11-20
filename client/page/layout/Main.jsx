@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import Company from '@client/page/company/Company.jsx';
+import Test from '@client/page/test/Test.jsx';
 import './Main.css';
 
 const { SubMenu } = Menu;
@@ -29,6 +30,7 @@ const menuDataStruct = [
       {
         id: 21,
         name: '新增组织架构',
+        pathName: '/test'
       },
       {
         id: 22,
@@ -105,6 +107,7 @@ class App extends Component {
             >
               <Switch>
                 <Route exact path="/" component={Company} />
+                <Route exact path="/test" component={Test} />
               </Switch>
             </Content>
           </Layout>

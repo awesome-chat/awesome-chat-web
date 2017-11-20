@@ -8,6 +8,8 @@ const webpackConfig = require('../config/dev.webpack.config');
 let router = require('./router');
 
 const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
 const compiler = webpack(webpackConfig);
 
@@ -29,6 +31,10 @@ app.use(devMiddleware);
 app.use(hotMiddleware);
 
 
+io.on('connection', (socket) => {
+  console.log('a user connected');
+});
+
 chokidar.watch(require.resolve('./router')).on('change', (path) => {
   console.log(path);
   const id = require.resolve('./router/index.js');
@@ -41,7 +47,7 @@ chokidar.watch(require.resolve('./router')).on('change', (path) => {
   router = require(id);
 })
 
-app.listen(config.port);
+http.listen(config.port);
 
 setTimeout(() => {
   console.log('-------------------------------');
