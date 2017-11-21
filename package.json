@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "NODE_ENV=development node index.js",
+    "debug": "NODE_ENV=development DEBUG=* node index.js",
     "build": "NODE_ENV=production webpack --config config/pord.webpack.config.js"
   },
   "repository": {

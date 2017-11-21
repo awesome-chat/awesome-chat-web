@@ -14,7 +14,6 @@ class Test extends Component {
 
   componentDidMount() {
     socket.on('chat message', (msg) => {
-      console.log('msg',msg)
       const newReply = this.state.reply;
       newReply.push(msg)
       this.setState({

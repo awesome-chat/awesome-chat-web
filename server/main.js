@@ -30,7 +30,6 @@ app.use(devMiddleware);
 
 app.use(hotMiddleware);
 
-
 io.on('connection', (socket) => {
   console.log('connection', socket.id)
   socket.on('chat message', (msg) => {
