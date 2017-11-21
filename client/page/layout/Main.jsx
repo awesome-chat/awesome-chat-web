@@ -30,7 +30,7 @@ const menuDataStruct = [
       {
         id: 21,
         name: '新增组织架构',
-        pathName: '/test'
+        pathName: '/'
       },
       {
         id: 22,
@@ -107,7 +107,6 @@ class App extends Component {
             >
               <Switch>
                 <Route exact path="/" component={Company} />
-                <Route exact path="/test" component={Test} />
               </Switch>
             </Content>
           </Layout>

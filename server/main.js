@@ -32,7 +32,11 @@ app.use(hotMiddleware);
 
 
 io.on('connection', (socket) => {
-  console.log('a user connected');
+  console.log('connection', socket.id)
+  socket.on('chat message', (msg) => {
+    io.emit('chat message', msg);
+    console.log(`message: ${msg}`);
+  });
 });
 
 chokidar.watch(require.resolve('./router')).on('change', (path) => {
