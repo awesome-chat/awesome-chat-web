@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { Switch, Route } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
-import Company from '@client/page/company/Company.jsx';
+import CompanyEdit from '@client/page/company/Edit.jsx';
+import CompanyDetail from '@client/page/company/Detail.jsx';
 import Test from '@client/page/test/Test.jsx';
 import './Main.css';
 
@@ -17,8 +18,13 @@ const menuDataStruct = [
     child: [
       {
         id: 11,
+        name: '信息详情',
+        pathName: '/company/detail'
+      },
+      {
+        id: 12,
         name: '信息修改',
-        pathName: '/'
+        pathName: '/company/edit'
       }
     ]
   },
@@ -66,11 +72,13 @@ class App extends Component {
   render() {
     const menuContent = menuDataStruct.map(d =>
       <SubMenu key={d.id} title={<span><Icon type={d.type || 'user'} />{d.name}</span>}>
-        {d.child.map(t => <Menu.Item key={t.id}>
-          <Link to={t.pathName || '/'}>
-            {t.name}
-          </Link>
-        </Menu.Item>)}
+        {d.child.map(t => (
+          <Menu.Item key={t.id}>
+            <Link to={t.pathName || '/'}>
+              {t.name}
+            </Link>
+          </Menu.Item>
+        ))}
       </SubMenu>)
 
     return (
@@ -106,7 +114,8 @@ class App extends Component {
               }}
             >
               <Switch>
-                <Route exact path="/" component={Company} />
+                <Route exact path="/company/detail" component={CompanyDetail} />
+                <Route path="/company/edit" component={CompanyEdit} />
               </Switch>
             </Content>
           </Layout>

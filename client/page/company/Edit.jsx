@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Input, Select, Button, AutoComplete, DatePicker, Upload, message, Icon } from 'antd';
-import './Company.css';
+import './company.css';
 
 const FormItem = Form.Item;
 const { Option } = Select;
