@@ -13,7 +13,7 @@ class Detail extends Component {
     this.state = {
       data: {
         name: 'wry',
-        id: '12asdvhbadsjvbhjkasdvkjahsdvkajsdkjsda3',
+        owner: '12asdvhbadsjvbhjkasdvkjahsdvkajsdkjsda3',
         tel: '111111',
         mail: '11@11.com',
       },
@@ -25,14 +25,14 @@ class Detail extends Component {
     this.dataStrcut = [
       {
         name: 'name',
-        label: '姓名：',
+        label: '公司名：',
         layout: {
           ...this.commonLayout
         },
       },
       {
-        name: 'id',
-        label: 'ID：',
+        name: 'owner',
+        label: '法定代表人：',
         layout: {
           ...this.commonLayout
         },
@@ -58,7 +58,7 @@ class Detail extends Component {
     return (
       <div>
         <DetailPageCreate
-          style={{ margin: '20px' }}
+          style={{ margin: '10px' }}
           dataStrcut={this.dataStrcut}
           data={this.state.data}
         />
