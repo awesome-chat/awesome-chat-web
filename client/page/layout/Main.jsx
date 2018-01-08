@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import CompanyEdit from '@client/page/company/Edit.jsx';
 import CompanyDetail from '@client/page/company/Detail.jsx';
-import Test from '@client/page/test/Test.jsx';
 import './Main.css';
 
 const { SubMenu } = Menu;
