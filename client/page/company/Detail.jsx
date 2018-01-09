@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Form, Input, Select, Button, AutoComplete, DatePicker, Upload, message, Icon } from 'antd'
-import DetailPageCreate from 'detail-page-create'
+import CompanyDetailPageCreate from 'detail-page-create'
 import './company.css'
 
 const FormItem = Form.Item;
 const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
 
-class Detail extends Component {
+class CompanyDetail extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -57,7 +57,8 @@ class Detail extends Component {
   render() {
     return (
       <div>
-        <DetailPageCreate
+        <h1 className="page-title">信息详情</h1>
+        <CompanyDetailPageCreate
           style={{ margin: '10px' }}
           dataStrcut={this.dataStrcut}
           data={this.state.data}
@@ -67,4 +68,4 @@ class Detail extends Component {
   }
 }
 
-export default Detail;
+export default CompanyDetail;

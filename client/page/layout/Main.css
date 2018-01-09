@@ -1,5 +1,14 @@
 #app{
   height: 100%;
+  .page-title{
+    position: relative;
+    left: -24px;
+    background: #108ee9;
+    color: #fff;
+    padding: 10px;
+    display: inline-block;
+    margin-bottom: 30px;
+  }
   .ant-layout{
     height: 100%;
   }

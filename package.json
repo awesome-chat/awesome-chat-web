@@ -22,7 +22,7 @@
   "dependencies": {
     "ant-form": "^0.0.2",
     "chokidar": "^1.7.0",
-    "detail-page-create": "^0.0.3",
+    "detail-page-create": "^0.0.5",
     "express": "^4.16.2",
     "react": "^16.1.0",
     "react-dom": "^16.1.0",
