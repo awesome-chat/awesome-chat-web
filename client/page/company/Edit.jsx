@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import { Input, Select, Button, AutoComplete, DatePicker, Upload, message, Icon } from 'antd';
+import { Input } from 'antd';
 import Form from 'ant-form'
 import './company.css';
-
-const FormItem = Form.Item;
-const { Option } = Select;
-const AutoCompleteOption = AutoComplete.Option;
 
 class CompanyEdit extends Component {
   constructor(props) {
@@ -25,7 +21,6 @@ class CompanyEdit extends Component {
             style: { marginLeft: '190px' },
             type: 'primary',
             htmlType: 'submit',
-            size: 'large',
           },
           text: '修改',
         }],

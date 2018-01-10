@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import CompanyEdit from '@client/page/company/Edit.jsx';
 import CompanyDetail from '@client/page/company/Detail.jsx';
+import AttendanceList from '@client/page/attendance/List.jsx';
 import './Main.css';
 
 const { SubMenu } = Menu;
@@ -51,11 +52,8 @@ const menuDataStruct = [
       {
         id: 31,
         name: '考勤查询',
+        pathName: '/attendance/list'
       },
-      {
-        id: 32,
-        name: '考勤修改',
-      }
     ]
   }
 ]
@@ -115,6 +113,7 @@ class App extends Component {
               <Switch>
                 <Route exact path="/company/detail" component={CompanyDetail} />
                 <Route path="/company/edit" component={CompanyEdit} />
+                <Route path="/attendance/list" component={AttendanceList} />
               </Switch>
             </Content>
           </Layout>
