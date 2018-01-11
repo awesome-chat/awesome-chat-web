@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Input, Breadcrumb } from 'antd';
 import Form from 'ant-form'
-import './company.css';
 
-class CompanyEdit extends Component {
+class UserEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -28,18 +27,25 @@ class CompanyEdit extends Component {
       items: [{
         opts: {
           initialValue: '',
-          rules: [{ required: true, message: '请输入公司名称!', whitespace: true }],
+          rules: [{ required: true, message: '请输入员工姓名!', whitespace: true }],
         },
         name: 'name',
-        props: { ...formItemLayout, label: '公司名' },
+        props: { ...formItemLayout, label: '员工姓名' },
         component: <Input />,
       },{
         opts: {
           initialValue: '',
-          rules: [{ required: true, message: '请输入法定代表人!', whitespace: true }],
         },
-        name: 'owner',
-        props: { ...formItemLayout, label: '法定代表人' },
+        name: 'Id',
+        props: { ...formItemLayout, label: '员工ID' },
+        component: <span>test-user-id</span>,
+      },{
+        opts: {
+          initialValue: '',
+          rules: [{ required: true, message: '请输入上级!', whitespace: true }],
+        },
+        name: 'userParent',
+        props: { ...formItemLayout, label: '上级' },
         component: <Input />,
       },{
         opts: {
@@ -52,10 +58,10 @@ class CompanyEdit extends Component {
       },{
         opts: {
           initialValue: '',
-          rules: [{ required: true, message: '请输入联系电话!', whitespace: true }],
+          rules: [{ required: true, message: '请输入所属部门!', whitespace: true }],
         },
-        name: 'mail',
-        props: { ...formItemLayout, label: '联系电话' },
+        name: 'depID',
+        props: { ...formItemLayout, label: '所属部门' },
         component: <Input />,
       },],
     }
@@ -66,9 +72,9 @@ class CompanyEdit extends Component {
       <div>
         <Breadcrumb>
           <Breadcrumb.Item>主页</Breadcrumb.Item>
-          <Breadcrumb.Item>信息修改</Breadcrumb.Item>
+          <Breadcrumb.Item>员工信息修改</Breadcrumb.Item>
         </Breadcrumb>
-        <h1 className="page-title">信息修改</h1>
+        <h1 className="page-title">员工信息修改</h1>
         <Form
           formConfig={this.formConfig}
           onSubmit={(err, values) => { console.log(err || values) }}
@@ -79,4 +85,4 @@ class CompanyEdit extends Component {
 }
 
 
-export default CompanyEdit;
+export default UserEdit;

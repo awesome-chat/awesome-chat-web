@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import { Form, Input, Select, Button, AutoComplete, DatePicker, Upload, message, Icon } from 'antd'
+import { Breadcrumb, Card } from 'antd'
 import CompanyDetailPageCreate from 'detail-page-create'
 import './company.css'
-
-const FormItem = Form.Item;
-const { Option } = Select;
-const AutoCompleteOption = AutoComplete.Option;
 
 class CompanyDetail extends Component {
   constructor(props) {
@@ -25,28 +21,28 @@ class CompanyDetail extends Component {
     this.dataStrcut = [
       {
         name: 'name',
-        label: '公司名：',
+        label: '公司名:',
         layout: {
           ...this.commonLayout
         },
       },
       {
         name: 'owner',
-        label: '法定代表人：',
+        label: '法定代表人:',
         layout: {
           ...this.commonLayout
         },
       },
       {
         name: 'tel',
-        label: '电话：',
+        label: '电话:',
         layout: {
           ...this.commonLayout
         },
       },
       {
         name: 'mail',
-        label: '邮箱：',
+        label: '邮箱:',
         layout: {
           ...this.commonLayout
         },
@@ -57,12 +53,19 @@ class CompanyDetail extends Component {
   render() {
     return (
       <div>
-        <h1 className="page-title">信息详情</h1>
-        <CompanyDetailPageCreate
-          style={{ margin: '10px' }}
-          dataStrcut={this.dataStrcut}
-          data={this.state.data}
-        />
+        <Breadcrumb>
+          <Breadcrumb.Item>主页</Breadcrumb.Item>
+          <Breadcrumb.Item>公司详情</Breadcrumb.Item>
+        </Breadcrumb>
+        <h1 className="page-title">公司详情</h1>
+        <Card>
+          <CompanyDetailPageCreate
+            rowStyle={{ background: '#f8f8f8', paddingTop: '5px' }}
+            style={{ margin: '10px' }}
+            dataStrcut={this.dataStrcut}
+            data={this.state.data}
+          />
+        </Card>
       </div>
     );
   }

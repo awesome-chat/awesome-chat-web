@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Input } from 'antd'
+import { Table, Input, Breadcrumb } from 'antd'
 import { Link } from 'react-router-dom'
 import Form from 'ant-form'
 
@@ -59,14 +59,17 @@ class AttendanceList extends Component {
       title: '姓名',
       dataIndex: 'name',
       key: 'name',
+      width: '25%',
     }, {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
+      width: '25%',
     }, {
       title: '部门',
       dataIndex: 'department',
       key: 'department',
+      width: '25%',
     }, {
       title: '操作',
       dataIndex: 'operate',
@@ -75,7 +78,8 @@ class AttendanceList extends Component {
         <div>
           <Link to="/attendance/detail">查看详情</Link>
         </div>
-      )
+      ),
+      width: '25%',
     }];
   }
 
@@ -104,6 +108,10 @@ class AttendanceList extends Component {
   render() {
     return (
       <div>
+        <Breadcrumb>
+          <Breadcrumb.Item>主页</Breadcrumb.Item>
+          <Breadcrumb.Item>考勤查询</Breadcrumb.Item>
+        </Breadcrumb>
         <h1 className="page-title">考勤查询</h1>
         <Form
           formConfig={this.formConfig}

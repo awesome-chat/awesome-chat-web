@@ -1,10 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { Switch, Route } from 'react-router';
 import { Link } from 'react-router-dom';
-import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+import { Layout, Menu, Icon } from 'antd';
+import OrgEdit from '@client/page/organization/Edit.jsx';
+import OrgDepEdit from '@client/page/organization/dep/Edit.jsx';
+import OrgUserEdit from '@client/page/organization/user/Edit.jsx';
 import CompanyEdit from '@client/page/company/Edit.jsx';
 import CompanyDetail from '@client/page/company/Detail.jsx';
 import AttendanceList from '@client/page/attendance/List.jsx';
+import AttendanceDetail from '@client/page/attendance/Detail.jsx';
 import './Main.css';
 
 const { SubMenu } = Menu;
@@ -34,13 +38,9 @@ const menuDataStruct = [
     type: 'usergroup-add',
     child: [
       {
-        id: 21,
-        name: '新增组织架构',
-        pathName: '/'
-      },
-      {
         id: 22,
         name: '组织架构修改',
+        pathName: '/org/edit'
       }
     ]
   },
@@ -82,7 +82,7 @@ class App extends Component {
       <Layout className="layout">
         <Header className="header">
           <div className="title">
-            {`Nchat内部管理系统 —— XX公司`}
+            {`Nchat内部管理系统 —— Test公司`}
           </div>
           <div className="user">
             <Icon type="user" />
@@ -114,6 +114,10 @@ class App extends Component {
                 <Route exact path="/company/detail" component={CompanyDetail} />
                 <Route path="/company/edit" component={CompanyEdit} />
                 <Route path="/attendance/list" component={AttendanceList} />
+                <Route path="/attendance/detail" component={AttendanceDetail} />
+                <Route path="/org/edit" component={OrgEdit} />
+                <Route path="/org/dep/edit" component={OrgDepEdit} />
+                <Route path="/org/user/edit" component={OrgUserEdit} />
               </Switch>
             </Content>
           </Layout>

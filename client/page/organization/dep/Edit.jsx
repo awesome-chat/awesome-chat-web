@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Input, Breadcrumb } from 'antd';
 import Form from 'ant-form'
-import './company.css';
 
-class CompanyEdit extends Component {
+class DepOrg extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -28,34 +27,34 @@ class CompanyEdit extends Component {
       items: [{
         opts: {
           initialValue: '',
-          rules: [{ required: true, message: '请输入公司名称!', whitespace: true }],
+          rules: [{ required: true, message: '请输入部门名称!', whitespace: true }],
         },
-        name: 'name',
-        props: { ...formItemLayout, label: '公司名' },
+        name: 'depName',
+        props: { ...formItemLayout, label: '部门名称' },
         component: <Input />,
       },{
         opts: {
           initialValue: '',
-          rules: [{ required: true, message: '请输入法定代表人!', whitespace: true }],
+          rules: [{ required: true, message: '请输入部门ID!', whitespace: true }],
         },
-        name: 'owner',
-        props: { ...formItemLayout, label: '法定代表人' },
+        name: 'depId',
+        props: { ...formItemLayout, label: '部门ID' },
+        component: <span>testId</span>,
+      },{
+        opts: {
+          initialValue: '',
+          rules: [{ required: true, message: '请输入部门负责人!', whitespace: true }],
+        },
+        name: 'depOwner',
+        props: { ...formItemLayout, label: '部门负责人' },
         component: <Input />,
       },{
         opts: {
           initialValue: '',
-          rules: [{ required: true, message: '请输入联系电话!', whitespace: true }],
+          rules: [{ required: true, message: '请输入上级部门!', whitespace: true }],
         },
-        name: 'tel',
-        props: { ...formItemLayout, label: '联系电话' },
-        component: <Input />,
-      },{
-        opts: {
-          initialValue: '',
-          rules: [{ required: true, message: '请输入联系电话!', whitespace: true }],
-        },
-        name: 'mail',
-        props: { ...formItemLayout, label: '联系电话' },
+        name: 'depParent',
+        props: { ...formItemLayout, label: '上级部门' },
         component: <Input />,
       },],
     }
@@ -66,9 +65,9 @@ class CompanyEdit extends Component {
       <div>
         <Breadcrumb>
           <Breadcrumb.Item>主页</Breadcrumb.Item>
-          <Breadcrumb.Item>信息修改</Breadcrumb.Item>
+          <Breadcrumb.Item>部门信息修改</Breadcrumb.Item>
         </Breadcrumb>
-        <h1 className="page-title">信息修改</h1>
+        <h1 className="page-title">部门信息修改</h1>
         <Form
           formConfig={this.formConfig}
           onSubmit={(err, values) => { console.log(err || values) }}
@@ -79,4 +78,4 @@ class CompanyEdit extends Component {
 }
 
 
-export default CompanyEdit;
+export default DepOrg;

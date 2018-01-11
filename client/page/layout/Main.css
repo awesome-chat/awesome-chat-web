@@ -1,13 +1,14 @@
 #app{
   height: 100%;
-  .page-title{
-    position: relative;
-    left: -24px;
-    background: #108ee9;
-    color: #fff;
-    padding: 10px;
-    display: inline-block;
-    margin-bottom: 30px;
+  .ant-breadcrumb {
+    height: 30px;
+    line-height: 30px;
+    margin-bottom: 16px;
+    background: #f8f8f8;
+    padding: 0 10px;
+    span {
+      color: #1890ff !important;
+    }
   }
   .ant-layout{
     height: 100%;
