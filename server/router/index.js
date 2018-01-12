@@ -6,8 +6,14 @@ const router = express.Router()
 
 // 静态文件
 const staticDir = path.join(__dirname, '../../static');
+const buildDir = path.join(__dirname, '../../build');
 router.get('/', (req, res) => {
   const filePath = `${staticDir}/index.html`;
+  res.sendFile(filePath);
+});
+
+router.get('/build/*', (req, res) => {
+  const filePath = `${buildDir}${res.url.split('/build')[1]}`;
   res.sendFile(filePath);
 });
 
