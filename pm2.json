@@ -1,0 +1,22 @@
+{
+  "apps" : [{
+    "name"               : "awesome-chat",
+    "script"             : "index.js",
+    "env": {
+      "COMMON_VARIABLE": "true",
+      "NODE_ENV": "production",
+      "BABEL_DISABLE_CACHE": 1
+    },
+    "exec_interpreter"   : "node",
+    "node_args"          : "--harmony",
+    "exec_mode"          : "cluster_mode",
+    "instances"          : 0,
+    "log_date_format"    : "YYYY-MM-DD HH:mm Z",
+    "max_memory_restart" : "700M",
+    "merge_logs"         : true,
+    "error_file"         : "/var/logs/awesome-chat/error.log",
+    "out_file"           : "/var/logs/awesome-chat/out.log",
+    "pid_file"           : "/var/logs/awesome-chat/awesome-chat.pid",
+    "watch"              : false
+  }]
+}
