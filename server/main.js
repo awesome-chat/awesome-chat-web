@@ -13,22 +13,23 @@ const io = require('socket.io')(http);
 
 const compiler = webpack(webpackConfig);
 
-const hotMiddleware = webpackHotMiddleware(compiler);
-const devMiddleware = webpackDevMiddleware(compiler, {
-  publicPath: '/build/',
-  stats: {
-    colors: true,
-    chunks: false,
-  },
-});
+if (process.env.NODE_ENV === 'development') {
+  const hotMiddleware = webpackHotMiddleware(compiler);
+  const devMiddleware = webpackDevMiddleware(compiler, {
+    publicPath: '/build/',
+    stats: {
+      colors: true,
+      chunks: false,
+    },
+  });
+
+  app.use(devMiddleware);
+  app.use(hotMiddleware);
+}
 
 app.use((req, res, next) => {
   router(req, res, next);
 });
-
-app.use(devMiddleware);
-
-app.use(hotMiddleware);
 
 io.on('connection', (socket) => {
   console.log('connection', socket.id)
