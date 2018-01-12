@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Breadcrumb, Card } from 'antd'
 import CompanyDetailPageCreate from 'detail-page-create'
-import './company.css'
+import './Company.css'
 
 class CompanyDetail extends Component {
   constructor(props) {
