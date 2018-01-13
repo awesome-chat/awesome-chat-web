@@ -6,6 +6,8 @@ const router = express.Router()
 
 // 静态文件
 const staticDir = path.join(__dirname, '../../static');
+
+// 打包文件
 const buildDir = path.join(__dirname, '../../build');
 
 router.get('/', (req, res) => {
@@ -14,7 +16,6 @@ router.get('/', (req, res) => {
 });
 
 router.get('/build/*', (req, res) => {
-  console.log(req.url)
   const filePath = `${buildDir}${req.url.split('/build')[1]}`;
   res.sendFile(filePath);
 });
