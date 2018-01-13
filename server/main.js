@@ -27,9 +27,10 @@ if (process.env.NODE_ENV === 'development') {
   app.use(hotMiddleware);
 }
 
-app.use((req, res, next) => {
-  router(req, res, next);
-});
+router(app)
+// app.use((req, res, next) => {
+//   router(req, res, next);
+// });
 
 io.on('connection', (socket) => {
   console.log('connection', socket.id)
@@ -59,4 +60,4 @@ setTimeout(() => {
   console.log('-------------------------------');
 }, 1000);
 
-module.exports = app;
+module.exports = app
