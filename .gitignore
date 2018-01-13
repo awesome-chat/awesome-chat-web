@@ -1,4 +1,4 @@
 /node_modules
 /build
 /.vscode
-/server/config/db.config.js
+db.config.js
