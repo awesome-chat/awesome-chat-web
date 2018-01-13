@@ -3,8 +3,8 @@ const config = require('../config/default');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpack = require('webpack');
-const chokidar = require('chokidar');
 const webpackConfig = require('../config/dev.webpack.config');
+
 let router = require('./router');
 
 const app = express();
@@ -28,9 +28,6 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 router(app)
-// app.use((req, res, next) => {
-//   router(req, res, next);
-// });
 
 io.on('connection', (socket) => {
   console.log('connection', socket.id)
@@ -39,18 +36,6 @@ io.on('connection', (socket) => {
     console.log(`message: ${msg}`);
   });
 });
-
-chokidar.watch(require.resolve('./router')).on('change', (path) => {
-  console.log(path);
-  const id = require.resolve('./router/index.js');
-  const module = require.cache[id];
-
-  if (module && module.parent) {
-    module.parent.children.splice(module.parent.children.indexOf(id), 1);
-  }
-  delete require.cache[id];
-  router = require(id);
-})
 
 http.listen(config.port);
 

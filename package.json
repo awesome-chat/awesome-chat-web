@@ -22,8 +22,9 @@
   "homepage": "https://github.com/wengwengweng/awesome-chat-server#readme",
   "dependencies": {
     "ant-form": "^0.0.2",
+    "axios": "^0.17.1",
     "chokidar": "^1.7.0",
-    "detail-page-create": "^0.0.6",
+    "detail-page-create": "^0.0.7",
     "express": "^4.16.2",
     "mysql2": "^1.5.1",
     "react": "^16.1.0",

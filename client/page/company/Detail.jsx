@@ -1,18 +1,14 @@
 import React, { Component } from 'react';
 import { Breadcrumb, Card } from 'antd'
 import CompanyDetailPageCreate from 'detail-page-create'
+import api from '@client/utils/api'
 import './Company.css'
 
 class CompanyDetail extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      data: {
-        name: 'wry',
-        owner: '12asdvhbadsjvbhjkasdvkjahsdvkajsdkjsda3',
-        tel: '111111',
-        mail: '11@11.com',
-      },
+      data: {},
     }
     this.commonLayout = {
       labelCol: 2,
@@ -20,28 +16,28 @@ class CompanyDetail extends Component {
     }
     this.dataStrcut = [
       {
-        name: 'name',
+        name: 'companyName',
         label: '公司名:',
         layout: {
           ...this.commonLayout
         },
       },
       {
-        name: 'owner',
+        name: 'user.userName',
         label: '法定代表人:',
         layout: {
           ...this.commonLayout
         },
       },
       {
-        name: 'tel',
+        name: 'companyTel',
         label: '电话:',
         layout: {
           ...this.commonLayout
         },
       },
       {
-        name: 'mail',
+        name: 'companyMail',
         label: '邮箱:',
         layout: {
           ...this.commonLayout
@@ -50,7 +46,18 @@ class CompanyDetail extends Component {
     ]
   }
 
+  componentDidMount() {
+    api.getCompanyDetail({
+      companyId: 1
+    }).then(({ data }) => {
+      this.setState({
+        data,
+      })
+    })
+  }
+
   render() {
+    console.log(this.state.data)
     return (
       <div>
         <Breadcrumb>
