@@ -1,6 +1,7 @@
 const express = require('express')
-const fs = require('fs');
-const path = require('path');
+const fs = require('fs')
+const path = require('path')
+const { Company } = require('../models')
 
 const router = express.Router()
 
@@ -26,7 +27,15 @@ router.get('/static/*', (req, res) => {
 });
 
 router.get('/test', (req, res) => {
-  res.body = 1111222
+  console.log(' in test')
+  Company.findAll({
+    attributes: ['companyId', 'companyName']
+  }).then((d) => {
+    console.log(JSON.stringify(d))
+    res.send(JSON.stringify(d))
+  }).catch((err) => {
+    console.log(err);
+  });
 });
 
 module.exports = router;

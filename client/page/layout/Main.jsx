@@ -23,7 +23,7 @@ const menuDataStruct = [
       {
         id: 11,
         name: '信息详情',
-        pathName: '/company/detail'
+        pathName: '/'
       },
       {
         id: 12,
@@ -111,7 +111,7 @@ class App extends Component {
               }}
             >
               <Switch>
-                <Route exact path="/company/detail" component={CompanyDetail} />
+                <Route exact path="/" component={CompanyDetail} />
                 <Route path="/company/edit" component={CompanyEdit} />
                 <Route path="/attendance/list" component={AttendanceList} />
                 <Route path="/attendance/detail" component={AttendanceDetail} />
