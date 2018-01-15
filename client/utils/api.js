@@ -17,18 +17,25 @@ function handleError(response) {
 
 export default {
   // company
-  getCompanyDetail(data = {}) {
-    const { companyId } = data;
-    return io.get(`/company/${companyId}`).then(handleError);
+  getCompanyDetail() {
+    return io.get('/company').then(handleError);
   },
 
   updateCompanyDetail(data = {}) {
-    const { companyId } = data;
-    return io.put(`/company/${companyId}`, data).then(handleError);
+    return io.put('/company', data).then(handleError);
   },
 
   // user
-  getUser(data = {}) {
-    return io.get('/user').then(handleError);
+  getUserList(data = {}) {
+    const { userId, userName } = data
+    return io.get(`/user?userId=${userId||''}&userName=${userName||''}`).then(handleError);
+  },
+
+  // dep
+  getDepList() {
+    return io.get('/dep').then(handleError);
+  },
+  addDep(data = {}) {
+    return io.put('/dep', data).then(handleError);
   },
 }

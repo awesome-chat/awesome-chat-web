@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import { Input, Breadcrumb, Select, message, Spin } from 'antd';
 import Form from 'ant-form'
 import api from '@client/utils/api'
-import './Company.scss';
 
-class CompanyEdit extends Component {
+class DepAdd extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: {},
+      dep: [],
       user: [],
       loading: true,
     };
@@ -16,7 +15,7 @@ class CompanyEdit extends Component {
 
   componentDidMount() {
     this.fetchUser()
-    this.fetchData()
+    this.fetchDep()
   }
 
   fetchUser = () => {
@@ -27,10 +26,10 @@ class CompanyEdit extends Component {
     })
   }
 
-  fetchData = () => {
-    api.getCompanyDetail().then(({ data }) => {
+  fetchDep = () => {
+    api.getDepList().then(({ data }) => {
       this.setState({
-        data,
+        dep: data,
         loading: false,
       })
     })
@@ -43,9 +42,7 @@ class CompanyEdit extends Component {
     this.setState({
       loading: true,
     })
-    api.updateCompanyDetail({
-      ...values
-    }).then(({ data }) => {
+    api.addDep().then(({ data }) => {
       if (data) {
         message.success('操作成功')
       } else {
@@ -58,7 +55,7 @@ class CompanyEdit extends Component {
   }
 
   freshForm = () => {
-    const { data, user } = this.state;
+    const { dep, user } = this.state;
     const formItemLayout = {
       labelCol: { span: 4 },
       wrapperCol: { span: 6 }
@@ -79,19 +76,16 @@ class CompanyEdit extends Component {
       },
       items: [{
         opts: {
-          initialValue: data.companyName || '',
-          rules: [{ required: true, message: '请输入公司名称!', whitespace: true }],
+          rules: [{ required: true, message: '请输入部门名称!', whitespace: true }],
         },
-        name: 'companyName',
-        props: { ...formItemLayout, label: '公司名' },
+        name: 'depName',
+        props: { ...formItemLayout, label: '部门名称' },
         component: <Input />,
       },{
         opts: {
-          initialValue: data.user && String(data.user.userId) || '',
-          rules: [{ required: true, message: '请输入法定代表人!' }],
         },
-        name: 'companyOwnerId',
-        props: { ...formItemLayout, label: '法定代表人' },
+        name: 'depOwnerId',
+        props: { ...formItemLayout, label: '部门负责人' },
         component: (
           <Select
             showSearch
@@ -109,20 +103,24 @@ class CompanyEdit extends Component {
         ),
       },{
         opts: {
-          initialValue: data.companyTel || '',
-          rules: [{ required: true, message: '请输入联系电话!', whitespace: true }],
         },
-        name: 'companyTel',
-        props: { ...formItemLayout, label: '联系电话' },
-        component: <Input />,
-      },{
-        opts: {
-          initialValue: data.companyMail || '',
-          rules: [{ required: true, message: '请输入联系电话!', whitespace: true }],
-        },
-        name: 'companyMail',
-        props: { ...formItemLayout, label: '联系电话' },
-        component: <Input />,
+        name: 'depParentId',
+        props: { ...formItemLayout, label: '父级部门' },
+        component: (
+          <Select
+            showSearch
+            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+          >
+            {dep.map(d => (
+              <Select.Option
+                key={String(d.depId)}
+                value={String(d.depId)}
+              >
+                {d.depName}
+              </Select.Option>
+            ))}
+          </Select>
+        ),
       },],
     }
   }
@@ -136,7 +134,7 @@ class CompanyEdit extends Component {
           <Breadcrumb.Item>主页</Breadcrumb.Item>
           <Breadcrumb.Item>信息修改</Breadcrumb.Item>
         </Breadcrumb>
-        <h1 className="page-title">信息修改</h1>
+        <h1 className="page-title">新增部门</h1>
         <Spin spinning={this.state.loading}>
           <Form
             formConfig={this.formConfig}
@@ -149,4 +147,4 @@ class CompanyEdit extends Component {
 }
 
 
-export default CompanyEdit;
+export default DepAdd;

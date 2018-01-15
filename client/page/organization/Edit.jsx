@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
-import { Breadcrumb, Input, Table } from 'antd';
+import { Breadcrumb, Input, Table, Spin, Button, message } from 'antd';
 import Form from 'ant-form'
 import { Link } from 'react-router-dom'
+import api from '@client/utils/api'
 
 class OrgEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
       userDataSource: [],
-      depDataSource: []
+      depDataSource: [],
+      loadingUser: false,
+      loadingDep: false,
     };
     const formItemLayout = {
       labelCol: { span: 8 },
@@ -35,15 +38,15 @@ class OrgEdit extends Component {
         opts: {
           initialValue: '',
         },
-        name: 'name',
+        name: 'userName',
         props: { ...formItemLayout, label: '员工姓名' },
         component: <Input />,
       },{
         opts: {
           initialValue: '',
         },
-        name: 'owner',
-        props: { ...formItemLayout, label: '法定代表人' },
+        name: 'userId',
+        props: { ...formItemLayout, label: '员工ID' },
         component: <Input />,
       },],
     }
@@ -163,6 +166,32 @@ class OrgEdit extends Component {
     })
   }
 
+  handleUserSubmit = (err, values) => {
+    if (err) {
+      return
+    }
+    console.log(values)
+    this.setState({
+      loadingUser: true,
+    })
+    api.getUserList({
+      ...values
+    }).then(({ data }) => {
+      if (data) {
+        message.success('操作成功')
+      } else {
+        message.success('操作失败请重试')
+      }
+      this.setState({
+        loadingUser: false,
+      })
+    })
+  }
+
+  handleDepSubmit = () => {
+
+  }
+
   render() {
     return (
       <div>
@@ -171,26 +200,44 @@ class OrgEdit extends Component {
           <Breadcrumb.Item>组织架构修改</Breadcrumb.Item>
         </Breadcrumb>
         <h1 className="page-title">组织架构修改</h1>
+        <h2>
+          <span>员工相关</span>
+          <Link to="/org/user/add">
+            <Button style={{ marginLeft: '20px' }}>新增</Button>
+          </Link>
+        </h2>
         <Form
           formConfig={this.userFormConfig}
-          onSubmit={(err, values) => { console.log(err || values) }}
+          onSubmit={this.handleUserSubmit}
         />
-        <Table
-          style={{ margin: '20px 0' }}
-          dataSource={this.state.userDataSource}
-          columns={this.userColumns}
-          bordered
-        />
+        <Spin spinning={this.state.loadingUser}>
+          <Table
+            style={{ margin: '20px 0 50px 0' }}
+            dataSource={this.state.userDataSource}
+            columns={this.userColumns}
+            bordered
+            pagination={false}
+          />
+        </Spin>
+        <h2>
+          <span>部门相关</span>
+          <Link to="/org/dep/add">
+            <Button style={{ marginLeft: '20px' }}>新增</Button>
+          </Link>
+        </h2>
         <Form
           formConfig={this.depFormConfig}
-          onSubmit={(err, values) => { console.log(err || values) }}
+          onSubmit={this.handleDepSubmit}
         />
-        <Table
-          style={{ margin: '20px 0' }}
-          dataSource={this.state.depDataSource}
-          columns={this.depColumns}
-          bordered
-        />
+        <Spin spinning={this.state.loadingDep}>
+          <Table
+            style={{ margin: '20px 0' }}
+            dataSource={this.state.depDataSource}
+            columns={this.depColumns}
+            bordered
+            pagination={false}
+          />
+        </Spin>
       </div>
     )
   }

@@ -4,14 +4,11 @@ const { Company, User } = require('../models')
 
 const router = express.Router()
 
-router.get('/:id', (req, res) => {
-  const { id } = req.params;
-  console.log('id', id)
-
+router.get('/', (req, res) => {
   Company.findAll({
     attributes: ['companyName', 'companyMail','companyTel'],
     where: {
-      companyId: id
+      companyId: 1
     },
     include: [{
       model: User,
@@ -25,8 +22,7 @@ router.get('/:id', (req, res) => {
   });
 });
 
-router.put('/:id', (req, res) => {
-  const { id } = req.params;
+router.put('/', (req, res) => {
   const body = req.body;
   console.log(req.params, body)
   Company.update({
@@ -35,7 +31,7 @@ router.put('/:id', (req, res) => {
     companyTel: body.companyTel,
     companyMail: body.companyMail,
   }, {
-    where: { companyId: id },
+    where: { companyId: 1 },
     plain: true
   }).then((d) => {
     res.send(d)

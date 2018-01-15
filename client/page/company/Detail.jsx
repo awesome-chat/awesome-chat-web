@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Breadcrumb, Card } from 'antd'
+import { Breadcrumb, Card, Spin } from 'antd'
 import CompanyDetailPageCreate from 'detail-page-create'
 import api from '@client/utils/api'
 import './Company.scss'
@@ -9,6 +9,7 @@ class CompanyDetail extends Component {
     super(props)
     this.state = {
       data: {},
+      loading: true,
     }
     this.commonLayout = {
       labelCol: 2,
@@ -51,11 +52,10 @@ class CompanyDetail extends Component {
   }
 
   fetchData = () => {
-    api.getCompanyDetail({
-      companyId: 1
-    }).then(({ data }) => {
+    api.getCompanyDetail().then(({ data }) => {
       this.setState({
         data,
+        loading: false,
       })
     })
   }
@@ -70,12 +70,14 @@ class CompanyDetail extends Component {
         </Breadcrumb>
         <h1 className="page-title">公司详情</h1>
         <Card>
-          <CompanyDetailPageCreate
-            rowStyle={{ background: '#f8f8f8', paddingTop: '5px' }}
-            style={{ margin: '10px' }}
-            dataStrcut={this.dataStrcut}
-            data={this.state.data}
-          />
+          <Spin spinning={this.state.loading}>
+            <CompanyDetailPageCreate
+              rowStyle={{ background: '#f8f8f8', paddingTop: '5px' }}
+              style={{ margin: '10px' }}
+              dataStrcut={this.dataStrcut}
+              data={this.state.data}
+            />
+          </Spin>
         </Card>
       </div>
     );
