@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Breadcrumb, Card } from 'antd'
 import CompanyDetailPageCreate from 'detail-page-create'
 import api from '@client/utils/api'
-import './Company.css'
+import './Company.scss'
 
 class CompanyDetail extends Component {
   constructor(props) {
@@ -47,6 +47,10 @@ class CompanyDetail extends Component {
   }
 
   componentDidMount() {
+    this.fetchData()
+  }
+
+  fetchData = () => {
     api.getCompanyDetail({
       companyId: 1
     }).then(({ data }) => {

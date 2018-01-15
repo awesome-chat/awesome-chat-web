@@ -1,12 +1,62 @@
 import React, { Component } from 'react';
-import { Input, Breadcrumb } from 'antd';
+import { Input, Breadcrumb, Select, message } from 'antd';
 import Form from 'ant-form'
-import './Company.css';
+import api from '@client/utils/api'
+import './Company.scss';
 
 class CompanyEdit extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      data: {},
+      user: []
+    };
+  }
+
+  componentDidMount() {
+    this.fetchUser()
+    this.fetchData()
+  }
+
+  fetchUser = () => {
+    api.getUser({
+      companyId: 1
+    }).then(({ data }) => {
+      this.setState({
+        user: data,
+      })
+    })
+  }
+
+  fetchData = () => {
+    api.getCompanyDetail({
+      companyId: 1
+    }).then(({ data }) => {
+      this.setState({
+        data,
+      })
+    })
+  }
+
+  handleSubmit = (err, values) => {
+    console.log(err, values)
+    if (err) {
+      return
+    }
+    api.updateCompanyDetail({
+      companyId: 1,
+      ...values
+    }).then(({ data }) => {
+      if (data) {
+        message.success('操作成功')
+      } else {
+        message.success('操作失败请重试')
+      }
+    })
+  }
+
+  freshForm = () => {
+    const { data, user } = this.state;
     const formItemLayout = {
       labelCol: { span: 4 },
       wrapperCol: { span: 6 }
@@ -27,34 +77,48 @@ class CompanyEdit extends Component {
       },
       items: [{
         opts: {
-          initialValue: '',
+          initialValue: data.companyName || '',
           rules: [{ required: true, message: '请输入公司名称!', whitespace: true }],
         },
-        name: 'name',
+        name: 'companyName',
         props: { ...formItemLayout, label: '公司名' },
         component: <Input />,
       },{
         opts: {
-          initialValue: '',
-          rules: [{ required: true, message: '请输入法定代表人!', whitespace: true }],
+          initialValue: data.user && String(data.user.userId) || '',
+          rules: [{ required: true, message: '请输入法定代表人!' }],
         },
-        name: 'owner',
+        name: 'companyOwnerId',
         props: { ...formItemLayout, label: '法定代表人' },
-        component: <Input />,
+        component: (
+          <Select
+            showSearch
+            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+          >
+            {user.map(d => (
+              <Select.Option
+                key={String(d.userId)}
+                value={String(d.userId)}
+              >
+                {`${d.userName}-${d.userId}`}
+              </Select.Option>
+            ))}
+          </Select>
+        ),
       },{
         opts: {
-          initialValue: '',
+          initialValue: data.companyTel || '',
           rules: [{ required: true, message: '请输入联系电话!', whitespace: true }],
         },
-        name: 'tel',
+        name: 'companyTel',
         props: { ...formItemLayout, label: '联系电话' },
         component: <Input />,
       },{
         opts: {
-          initialValue: '',
+          initialValue: data.companyMail || '',
           rules: [{ required: true, message: '请输入联系电话!', whitespace: true }],
         },
-        name: 'mail',
+        name: 'companyMail',
         props: { ...formItemLayout, label: '联系电话' },
         component: <Input />,
       },],
@@ -62,6 +126,8 @@ class CompanyEdit extends Component {
   }
 
   render() {
+    this.freshForm()
+
     return (
       <div>
         <Breadcrumb>
@@ -71,7 +137,7 @@ class CompanyEdit extends Component {
         <h1 className="page-title">信息修改</h1>
         <Form
           formConfig={this.formConfig}
-          onSubmit={(err, values) => { console.log(err || values) }}
+          onSubmit={this.handleSubmit}
         />
       </div>
     )

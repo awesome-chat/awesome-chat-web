@@ -4,10 +4,13 @@ const webpackHotMiddleware = require('webpack-hot-middleware');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpack = require('webpack');
 const webpackConfig = require('../config/dev.webpack.config');
+const bodyParser = require('body-parser');
 
 let router = require('./router');
 
 const app = express();
+app.use(bodyParser.json())
+
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 

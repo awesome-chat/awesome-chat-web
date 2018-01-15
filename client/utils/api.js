@@ -21,4 +21,14 @@ export default {
     const { companyId } = data;
     return io.get(`/company/${companyId}`).then(handleError);
   },
+
+  updateCompanyDetail(data = {}) {
+    const { companyId } = data;
+    return io.put(`/company/${companyId}`, data).then(handleError);
+  },
+
+  // user
+  getUser(data = {}) {
+    return io.get('/user').then(handleError);
+  },
 }

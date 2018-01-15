@@ -15,7 +15,32 @@ const baseConfig = {
       query: {
         presets: ['es2015', 'stage-0', 'react']
       }
-    },{
+    }, {
+      test: /\.scss$/,
+      use: [{
+        loader: 'style-loader'
+      }, {
+        loader: 'css-loader',
+        options: {
+          sourceMap: true
+        }
+      }, {
+        loader: 'sass-loader',
+        options: {
+          sourceMap: true
+        }
+      }],
+      exclude: /node_modules/,
+    }, {
+      test: /\.less$/,
+      use: [{
+        loader: 'style-loader'
+      }, {
+        loader: 'css-loader'
+      }, {
+        loader: 'less-loader',
+      }]
+    }, {
       test: /\.css$/,
       use: [
         {
@@ -23,12 +48,6 @@ const baseConfig = {
         },
         {
           loader: 'css-loader',
-          options: {
-            importLoaders: 1,
-          }
-        },
-        {
-          loader: 'postcss-loader'
         }
       ]
     }]
