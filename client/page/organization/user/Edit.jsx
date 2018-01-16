@@ -1,15 +1,51 @@
 import React, { Component } from 'react';
-import { Input, Breadcrumb } from 'antd';
+import { Input, Breadcrumb, Select, Spin, message } from 'antd';
 import Form from 'ant-form'
+import api from '@client/utils/api'
 
 class UserEdit extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      loading: true,
+      user: {},
+      deps: [],
+    };
+    this.userId = props.match.params.userId;
+    this.isEdit = props.location.pathname.indexOf('edit') > -1
+  }
+
+  componentDidMount() {
+    this.fetchDep()
+    this.isEdit && this.fetchUserDetail()
+  }
+
+  fetchUserDetail = () => {
+    api.getUserDetail({
+      userId: this.userId
+    }).then(({ data }) => {
+      this.setState({
+        user: data,
+      })
+    })
+  }
+
+  fetchDep = () => {
+    api.getDepList().then(({ data }) => {
+      this.setState({
+        deps: data,
+        loading: false,
+      })
+    })
+  }
+
+  freshFormConfig = () => {
     const formItemLayout = {
       labelCol: { span: 4 },
       wrapperCol: { span: 6 }
     }
+
+    const { deps, user } = this.state
 
     this.formConfig = {
       buttons: {
@@ -21,64 +57,110 @@ class UserEdit extends Component {
             type: 'primary',
             htmlType: 'submit',
           },
-          text: '修改',
+          text: this.isEdit ? '修改' : '新增',
         }],
       },
       items: [{
         opts: {
-          initialValue: '',
+          initialValue: user.userName || '',
           rules: [{ required: true, message: '请输入员工姓名!', whitespace: true }],
         },
-        name: 'name',
+        name: 'userName',
         props: { ...formItemLayout, label: '员工姓名' },
         component: <Input />,
       },{
         opts: {
           initialValue: '',
         },
-        name: 'Id',
+        name: 'userId',
         props: { ...formItemLayout, label: '员工ID' },
-        component: <span>test-user-id</span>,
+        component: <span>{this.userId}</span>,
+        disabled: !this.isEdit,
       },{
         opts: {
-          initialValue: '',
-          rules: [{ required: true, message: '请输入上级!', whitespace: true }],
-        },
-        name: 'userParent',
-        props: { ...formItemLayout, label: '上级' },
-        component: <Input />,
-      },{
-        opts: {
-          initialValue: '',
+          initialValue: user.userTel || '',
           rules: [{ required: true, message: '请输入联系电话!', whitespace: true }],
         },
-        name: 'tel',
+        name: 'userTel',
         props: { ...formItemLayout, label: '联系电话' },
         component: <Input />,
       },{
         opts: {
-          initialValue: '',
-          rules: [{ required: true, message: '请输入所属部门!', whitespace: true }],
+          initialValue: user.dep && String(user.dep.depId) || '',
         },
-        name: 'depID',
+        name: 'depId',
         props: { ...formItemLayout, label: '所属部门' },
-        component: <Input />,
-      },],
+        component:  (
+          <Select
+            showSearch
+            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+          >
+            {deps.map(d => (
+              <Select.Option
+                key={String(d.depId)}
+                value={String(d.depId)}
+              >
+                {d.depName}
+              </Select.Option>
+            ))}
+          </Select>
+        ),
+      }],
+    }
+  }
+
+  handleSubmit = (err, values) => {
+    if (err) {
+      return
+    }
+    this.setState({
+      loading: true,
+    })
+    if (this.isEdit) {
+      api.updateUser({
+        ...values,
+        userId: this.userId,
+      }).then(({ data }) => {
+        if (data) {
+          message.success('操作成功')
+        } else {
+          message.success('操作失败请重试')
+        }
+        this.setState({
+          loading: false,
+        })
+      })
+    } else {
+      api.addUser({
+        ...values
+      }).then(({ data }) => {
+        if (data) {
+          message.success('操作成功')
+        } else {
+          message.success('操作失败请重试')
+        }
+        this.setState({
+          loading: false,
+        })
+      })
     }
   }
 
   render() {
+    this.freshFormConfig()
     return (
       <div>
         <Breadcrumb>
           <Breadcrumb.Item>主页</Breadcrumb.Item>
-          <Breadcrumb.Item>员工信息修改</Breadcrumb.Item>
+          <Breadcrumb.Item>{this.isEdit ? '员工信息修改' : '新增员工'}</Breadcrumb.Item>
         </Breadcrumb>
-        <h1 className="page-title">员工信息修改</h1>
-        <Form
-          formConfig={this.formConfig}
-          onSubmit={(err, values) => { console.log(err || values) }}
-        />
+        <h1 className="page-title">{this.isEdit ? '员工信息修改' : '新增员工'}</h1>
+        <Spin spinning={this.state.loading}>
+          <Form
+            formConfig={this.formConfig}
+            onSubmit={this.handleSubmit}
+          />
+        </Spin>
       </div>
     )
   }

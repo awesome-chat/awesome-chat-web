@@ -1,11 +1,93 @@
 import React, { Component } from 'react';
-import { Input, Breadcrumb } from 'antd';
+import { Input, Breadcrumb, Select, message, Spin } from 'antd';
 import Form from 'ant-form'
+import api from '@client/utils/api'
 
-class DepOrg extends Component {
+class DepAdd extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      dep: {},
+      deps: [],
+      users: [],
+      loading: true,
+    };
+    this.depId = props.match.params.depId;
+    this.isEdit = props.location.pathname.indexOf('edit') > -1
+  }
+
+  componentDidMount() {
+    this.fetchUserList()
+    this.fetchDepList()
+    this.isEdit && this.fetchDep()
+  }
+
+  fetchDep = () => {
+    api.getDepDetail({
+      depId: this.depId
+    }).then(({ data }) => {
+      this.setState({
+        dep: data,
+      })
+    })
+  }
+
+  fetchUserList = () => {
+    api.getUserList().then(({ data }) => {
+      this.setState({
+        users: data,
+      })
+    })
+  }
+
+  fetchDepList = () => {
+    api.getDepList().then(({ data }) => {
+      this.setState({
+        deps: data,
+        loading: false,
+      })
+    })
+  }
+
+  handleSubmit = (err, values) => {
+    if (err) {
+      return
+    }
+    this.setState({
+      loading: true,
+    })
+    if (this.isEdit) {
+      api.updateDep({
+        ...values,
+        depId: this.depId
+      }).then(({ data }) => {
+        if (data) {
+          message.success('操作成功')
+        } else {
+          message.success('操作失败请重试')
+        }
+        this.setState({
+          loading: false,
+        })
+      })
+    } else {
+      api.addDep({
+        ...values
+      }).then(({ data }) => {
+        if (data) {
+          message.success('操作成功')
+        } else {
+          message.success('操作失败请重试')
+        }
+        this.setState({
+          loading: false,
+        })
+      })
+    }
+  }
+
+  freshForm = () => {
+    const { dep, deps, users } = this.state;
     const formItemLayout = {
       labelCol: { span: 4 },
       wrapperCol: { span: 6 }
@@ -21,12 +103,12 @@ class DepOrg extends Component {
             type: 'primary',
             htmlType: 'submit',
           },
-          text: '修改',
+          text: this.isEdit ? '修改' : '新增',
         }],
       },
       items: [{
         opts: {
-          initialValue: '',
+          initialValue: dep.depName || '',
           rules: [{ required: true, message: '请输入部门名称!', whitespace: true }],
         },
         name: 'depName',
@@ -34,48 +116,77 @@ class DepOrg extends Component {
         component: <Input />,
       },{
         opts: {
-          initialValue: '',
-          rules: [{ required: true, message: '请输入部门ID!', whitespace: true }],
         },
         name: 'depId',
-        props: { ...formItemLayout, label: '部门ID' },
-        component: <span>testId</span>,
+        props: { ...formItemLayout, label: '部门名称' },
+        component: <span>{this.depId}</span>,
+        disabled: !this.isEdit,
       },{
         opts: {
-          initialValue: '',
-          rules: [{ required: true, message: '请输入部门负责人!', whitespace: true }],
+          initialValue: dep.depOwnerId && String(dep.depOwnerId) || '',
         },
-        name: 'depOwner',
+        name: 'depOwnerId',
         props: { ...formItemLayout, label: '部门负责人' },
-        component: <Input />,
+        component: (
+          <Select
+            showSearch
+            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+          >
+            {users.map(d => (
+              <Select.Option
+                key={String(d.userId)}
+                value={String(d.userId)}
+              >
+                {`${d.userName}-${d.userId}`}
+              </Select.Option>
+            ))}
+          </Select>
+        ),
       },{
         opts: {
-          initialValue: '',
-          rules: [{ required: true, message: '请输入上级部门!', whitespace: true }],
+          initialValue: dep.depParentId && String(dep.depParentId) || '',
         },
-        name: 'depParent',
-        props: { ...formItemLayout, label: '上级部门' },
-        component: <Input />,
+        name: 'depParentId',
+        props: { ...formItemLayout, label: '父级部门' },
+        component: (
+          <Select
+            showSearch
+            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+          >
+            {deps.map(d => (
+              <Select.Option
+                key={String(d.depId)}
+                value={String(d.depId)}
+              >
+                {d.depName}
+              </Select.Option>
+            ))}
+          </Select>
+        ),
       },],
     }
   }
 
   render() {
+    this.freshForm()
+
     return (
       <div>
         <Breadcrumb>
           <Breadcrumb.Item>主页</Breadcrumb.Item>
-          <Breadcrumb.Item>部门信息修改</Breadcrumb.Item>
+          <Breadcrumb.Item>{this.isEdit ? '修改部门消息' : '新增部门'}</Breadcrumb.Item>
         </Breadcrumb>
-        <h1 className="page-title">部门信息修改</h1>
-        <Form
-          formConfig={this.formConfig}
-          onSubmit={(err, values) => { console.log(err || values) }}
-        />
+        <h1 className="page-title">{this.isEdit ? '修改部门消息' : '新增部门'}</h1>
+        <Spin spinning={this.state.loading}>
+          <Form
+            formConfig={this.formConfig}
+            onSubmit={this.handleSubmit}
+          />
+        </Spin>
       </div>
     )
   }
 }
 
 
-export default DepOrg;
+export default DepAdd;

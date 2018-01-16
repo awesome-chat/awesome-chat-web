@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
 import OrgEdit from '@client/page/organization/Edit.jsx';
 import OrgDepEdit from '@client/page/organization/dep/Edit.jsx';
-import OrgDepAdd from '@client/page/organization/dep/Add.jsx';
 import OrgUserEdit from '@client/page/organization/user/Edit.jsx';
 import CompanyEdit from '@client/page/company/Edit.jsx';
 import CompanyDetail from '@client/page/company/Detail.jsx';
@@ -117,9 +116,10 @@ class App extends Component {
                 <Route path="/attendance/list" component={AttendanceList} />
                 <Route path="/attendance/detail" component={AttendanceDetail} />
                 <Route path="/org/edit" component={OrgEdit} />
-                <Route path="/org/dep/edit" component={OrgDepEdit} />
-                <Route path="/org/dep/add" component={OrgDepAdd} />
-                <Route path="/org/user/edit" component={OrgUserEdit} />
+                <Route path="/org/dep/edit/:depId" component={OrgDepEdit} />
+                <Route path="/org/dep/add" component={OrgDepEdit} />
+                <Route path="/org/user/edit/:userId" component={OrgUserEdit} />
+                <Route path="/org/user/add" component={OrgUserEdit} />
               </Switch>
             </Content>
           </Layout>

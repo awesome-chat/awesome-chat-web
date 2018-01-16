@@ -54,29 +54,21 @@ class OrgEdit extends Component {
     this.userColumns = [
       {
         title: '姓名',
-        dataIndex: 'name',
-        key: 'name',
-        width: '25%',
+        dataIndex: 'userName',
+        width: '33%',
       }, {
         title: 'ID',
-        dataIndex: 'id',
-        key: 'id',
-        width: '25%',
-      }, {
-        title: '部门',
-        dataIndex: 'dep',
-        key: 'dep',
-        width: '25%',
+        dataIndex: 'userId',
+        width: '33%',
       }, {
         title: '操作',
         dataIndex: 'operate',
-        key: 'operate',
-        render: () => (
+        render: (t, d) => (
           <div>
-            <Link to="/org/user/edit">编辑</Link>
+            <Link to={`/org/user/edit/${d.userId}`}>编辑</Link>
           </div>
         ),
-        width: '25%',
+        width: '33%',
       },
     ];
 
@@ -128,42 +120,14 @@ class OrgEdit extends Component {
         title: '操作',
         dataIndex: 'operate',
         key: 'operate',
-        render: () => (
+        render: (t, d) => (
           <div>
-            <Link to="/org/dep/edit">编辑</Link>
+            <Link to={`/org/dep/edit/${d.depId}`}>编辑</Link>
           </div>
         ),
         width: '33%',
       },
     ];
-  }
-
-  componentDidMount() {
-    this.fetchUserDate()
-    this.fetchDepData()
-  }
-
-  fetchUserDate = () => {
-    this.setState({
-      userDataSource: [
-        {
-          name: 1,
-          id: 1,
-          dep: 1,
-        }
-      ]
-    })
-  }
-
-  fetchDepData = () => {
-    this.setState({
-      depDataSource: [
-        {
-          depName: 22,
-          depId: 22,
-        }
-      ]
-    })
   }
 
   handleUserSubmit = (err, values) => {
@@ -178,9 +142,12 @@ class OrgEdit extends Component {
       ...values
     }).then(({ data }) => {
       if (data) {
-        message.success('操作成功')
+        this.setState({
+          userDataSource: data
+        })
+        message.success('查询成功')
       } else {
-        message.success('操作失败请重试')
+        message.success('查询失败请重试')
       }
       this.setState({
         loadingUser: false,
@@ -188,8 +155,29 @@ class OrgEdit extends Component {
     })
   }
 
-  handleDepSubmit = () => {
-
+  handleDepSubmit = (err, values) => {
+    if (err) {
+      return
+    }
+    console.log(values)
+    this.setState({
+      loadingUser: true,
+    })
+    api.getDepList({
+      ...values
+    }).then(({ data }) => {
+      if (data) {
+        this.setState({
+          depDataSource: data
+        })
+        message.success('查询成功')
+      } else {
+        message.success('查询失败请重试')
+      }
+      this.setState({
+        loadingUser: false,
+      })
+    })
   }
 
   render() {
@@ -212,6 +200,7 @@ class OrgEdit extends Component {
         />
         <Spin spinning={this.state.loadingUser}>
           <Table
+            rowKey="userId"
             style={{ margin: '20px 0 50px 0' }}
             dataSource={this.state.userDataSource}
             columns={this.userColumns}
@@ -231,6 +220,7 @@ class OrgEdit extends Component {
         />
         <Spin spinning={this.state.loadingDep}>
           <Table
+            rowKey="depId"
             style={{ margin: '20px 0' }}
             dataSource={this.state.depDataSource}
             columns={this.depColumns}
