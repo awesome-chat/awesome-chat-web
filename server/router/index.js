@@ -6,6 +6,7 @@ const buildDir = path.join(__dirname, '../../build')
 let company = require('./company')
 let user = require('./user')
 let dep = require('./dep')
+let verify = require('./verify')
 
 module.exports = (app) => {
   app.get('/', (req, res) => {
@@ -28,6 +29,7 @@ module.exports = (app) => {
   app.use('/company', (req, res, next) => company(req, res, next))
   app.use('/user', (req, res, next) => user(req, res, next))
   app.use('/dep', (req, res, next) => dep(req, res, next))
+  app.use('/verify', (req, res, next) => verify(req, res, next))
 
   chokidar.watch(path.join(__dirname, '/')).on('change', (path) => {
     console.log(`file changed: ${path}`);
@@ -35,7 +37,8 @@ module.exports = (app) => {
     const ids = [
       require.resolve('./company.js'),
       require.resolve('./user.js'),
-      require.resolve('./dep.js')
+      require.resolve('./dep.js'),
+      require.resolve('./verify.js')
     ];
     const modules = ids.map(id => require.cache[id])
 
@@ -48,5 +51,6 @@ module.exports = (app) => {
     company = require('./company')
     user = require('./user')
     dep = require('./dep')
+    verify = require('./verify')
   })
 }

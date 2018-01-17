@@ -24,11 +24,6 @@ router.get('/', (req, res) => {
   User.findAll({
     where: queryConditions,
     attributes: ['userName', 'userId'],
-    // include: [{
-    //   model: Dep,
-    //   attributes: ['depName'],
-    //   where: { depId: Sequelize.col('dep.depId') }
-    // }]
   }).then((d) => {
     res.send(JSON.stringify(d))
   }).catch((err) => {
