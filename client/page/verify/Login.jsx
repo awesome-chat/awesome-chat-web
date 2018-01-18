@@ -26,7 +26,7 @@ class CompanyEdit extends Component {
         message.success('操作成功')
         this.props.history.push('/')
       } else {
-        message.success('操作失败请重试')
+        message.error('用户名密码错误')
       }
       this.setState({
         loading: false,

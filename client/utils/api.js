@@ -8,18 +8,20 @@ const io = axios.create({
   withCredentials: true,
   responseType: 'json',
   headers: {
-    'X-Requested-With': 'XMLHttpRequest',
-    'authorization_admin': Cookies.get('authorization_admin') || ''
+    'X-Requested-With': 'XMLHttpRequest'
   },
 })
+
+io.defaults.headers.common.authorization_admin = Cookies.get('authorization_admin');
 
 function handleVerify(res) {
   const { authorization_admin = null } = res.headers
   if (authorization_admin) {
     Cookies.set('authorization_admin', authorization_admin, { expires: 7 })
+    io.defaults.headers.common.authorization_admin = authorization_admin;
   }
   if (res.data.code === 2) {
-    Cookies.remove('authorization_admin')
+    // Cookies.remove('authorization_admin')
     message.error('没有操作权限')
   }
   return res

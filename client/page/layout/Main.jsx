@@ -10,6 +10,7 @@ import CompanyDetail from '@client/page/company/Detail.jsx';
 import AttendanceList from '@client/page/attendance/List.jsx';
 import AttendanceDetail from '@client/page/attendance/Detail.jsx';
 import checkAuthenticated from '@client/utils/check-authenticated';
+import Cookies from 'js-cookie';
 import './Main.scss';
 
 const { SubMenu } = Menu;
@@ -66,6 +67,11 @@ class App extends Component {
     this.state = {}
   }
 
+  handleLogout = () => {
+    Cookies.remove('authorization_admin')
+    this.props.history.push('/login')
+  }
+
   render() {
     const menuContent = menuDataStruct.map(d =>
       <SubMenu key={d.id} title={<span><Icon type={d.type || 'user'} />{d.name}</span>}>
@@ -89,7 +95,12 @@ class App extends Component {
             <span>管理员</span>
             <span className="status online" />
             <Icon type="logout" />
-            <span>退出</span>
+            <span
+              style={{ cursor: 'pointer' }}
+              onClick={this.handleLogout}
+            >
+              退出
+            </span>
           </div>
         </Header>
         <Layout>
