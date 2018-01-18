@@ -1,4 +1,6 @@
 import axios from 'axios';
+import Cookies from 'js-cookie'
+import { message } from 'antd'
 
 const io = axios.create({
   baseURL: '/',
@@ -7,21 +9,30 @@ const io = axios.create({
   responseType: 'json',
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
+    'authorization_admin': Cookies.get('authorization_admin') || ''
   },
 })
 
-function handleError(response) {
-  return response;
+function handleVerify(res) {
+  const { authorization_admin = null } = res.headers
+  if (authorization_admin) {
+    Cookies.set('authorization_admin', authorization_admin, { expires: 7 })
+  }
+  if (res.data.code === 2) {
+    Cookies.remove('authorization_admin')
+    message.error('没有操作权限')
+  }
+  return res
 }
 
 
 export default {
   // company
   getCompanyDetail() {
-    return io.get('/company').then(handleError);
+    return io.get('/company').then(handleVerify);
   },
   updateCompanyDetail(data = {}) {
-    return io.put('/company', data).then(handleError);
+    return io.put('/company', data).then(handleVerify);
   },
 
 
@@ -30,49 +41,49 @@ export default {
     const { userId, userName } = data
     // 条件查询
     if (userId || userName) {
-      return io.get(`/user?userId=${userId || ''}&userName=${userName || ''}`).then(handleError);
+      return io.get(`/user?userId=${userId || ''}&userName=${userName || ''}`).then(handleVerify);
     }
-    return io.get('/user').then(handleError);
+    return io.get('/user').then(handleVerify);
   },
   getUserDetail(data = {}) {
     const { userId } = data
-    return io.get(`/user/${userId}`).then(handleError);
+    return io.get(`/user/${userId}`).then(handleVerify);
   },
   addUser(data = {}) {
     console.log('data', data)
-    return io.post('/user', data).then(handleError);
+    return io.post('/user', data).then(handleVerify);
   },
   updateUser(data = {}) {
-    return io.put('/user', data).then(handleError);
+    return io.put('/user', data).then(handleVerify);
   },
 
 
   // dep
   getDepDetail(data = {}) {
     const { depId } = data
-    return io.get(`/dep/${depId}`).then(handleError);
+    return io.get(`/dep/${depId}`).then(handleVerify);
   },
   getDepList(data = {}) {
     const { depId, depName } = data
     // 条件查询
     if (depId || depName) {
-      return io.get(`/dep?depId=${depId || ''}&depName=${depName || ''}`).then(handleError);
+      return io.get(`/dep?depId=${depId || ''}&depName=${depName || ''}`).then(handleVerify);
     }
-    return io.get('/dep').then(handleError);
+    return io.get('/dep').then(handleVerify);
   },
   addDep(data = {}) {
     console.log('data', data)
-    return io.post('/dep', data).then(handleError);
+    return io.post('/dep', data).then(handleVerify);
   },
   updateDep(data = {}) {
     console.log('data', data)
-    return io.put('/dep', data).then(handleError);
+    return io.put('/dep', data).then(handleVerify);
   },
 
 
   // verify
   verifyAdmin(data = {}) {
     console.log('data', data)
-    return io.post('/verify/admin', data).then(handleError);
+    return io.post('/verify/admin', data).then(handleVerify);
   },
 }

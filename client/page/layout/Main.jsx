@@ -9,6 +9,7 @@ import CompanyEdit from '@client/page/company/Edit.jsx';
 import CompanyDetail from '@client/page/company/Detail.jsx';
 import AttendanceList from '@client/page/attendance/List.jsx';
 import AttendanceDetail from '@client/page/attendance/Detail.jsx';
+import checkAuthenticated from '@client/utils/check-authenticated';
 import './Main.scss';
 
 const { SubMenu } = Menu;
@@ -58,12 +59,11 @@ const menuDataStruct = [
   }
 ]
 
+@checkAuthenticated
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      a: 1
-    }
+    this.state = {}
   }
 
   render() {

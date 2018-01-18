@@ -13,7 +13,8 @@ const baseConfig = {
       include: [alias['@client']],
       loader: 'babel-loader',
       query: {
-        presets: ['es2015', 'stage-0', 'react']
+        presets: ['es2015', 'stage-0', 'react'],
+        plugins: ['transform-decorators-legacy']
       }
     }, {
       test: /\.scss$/,

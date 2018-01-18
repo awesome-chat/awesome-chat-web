@@ -1,10 +1,9 @@
 const path = require('path')
 const chokidar = require('chokidar');
 
-module.exports = (paths, cb) => {
-  chokidar.watch(path.join(__dirname, '/')).on('change', (path) => {
+module.exports = (ids, cb) => {
+  chokidar.watch(path.join(__dirname, '../')).on('change', (path) => {
     console.log(`file changed: ${path}`);
-    const ids = paths.map(d => require.resolve(d))
 
     const modules = ids.map(id => require.cache[id])
 

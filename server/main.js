@@ -32,12 +32,12 @@ if (process.env.NODE_ENV === 'development') {
   app.use(hotMiddleware);
 }
 
-app.use(auth)
+app.use((req, res, next) => auth(req, res, next))
 
 router(app)
 
 watch([
-  './middlewares/auth'
+  require.resolve('./middlewares/auth')
 ], () => {
   auth = require('./middlewares/auth')
 })

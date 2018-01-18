@@ -62,7 +62,7 @@ router.post('/admin', (req, res) => {
           return
         }
         console.log('token', token)
-        res.setHeader('Authorization_admin', token)
+        res.setHeader('authorization_admin', token)
         res.send({
           code: 0,
         })
@@ -70,10 +70,10 @@ router.post('/admin', (req, res) => {
     )
   });
 
-  const { adminId, adminPwd } = req.body;
+  const { adminName, adminPwd } = req.body;
   Admin.findAll({
     where: {
-      adminId,
+      adminName,
       adminPwd
     }
   }).then((d) => {

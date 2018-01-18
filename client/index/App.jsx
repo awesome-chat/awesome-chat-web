@@ -4,10 +4,16 @@ import { Switch } from 'react-router'
 import Login from '@client/page/verify/Login.jsx';
 import Layout from '@client/page/layout/Main.jsx';
 
-export default () =>
-  <Router>
-    <Switch>
-      <Route exact path="/login" component={Login} />
-      <Route path="/" component={Layout} />
-    </Switch>
-  </Router>
+export default class App extends React.Component {
+  render() {
+    return (
+      <Router>
+        <Switch>
+          <Route exact path="/login" component={Login} />
+          <Route path="/" component={Layout} />
+        </Switch>
+      </Router>
+    )
+  }
+}
+

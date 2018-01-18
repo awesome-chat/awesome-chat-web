@@ -22,8 +22,9 @@ class CompanyEdit extends Component {
     api.verifyAdmin({
       ...values
     }).then(({ data }) => {
-      if (data) {
+      if (data.code === 0) {
         message.success('操作成功')
+        this.props.history.push('/')
       } else {
         message.success('操作失败请重试')
       }
@@ -54,10 +55,10 @@ class CompanyEdit extends Component {
       },
       items: [{
         opts: {
-          rules: [{ required: true, message: '请输入管理员ID!', whitespace: true }],
+          rules: [{ required: true, message: '请输入管理员账号!', whitespace: true }],
         },
-        name: 'adminId',
-        props: { ...formItemLayout, label: 'ID' },
+        name: 'adminName',
+        props: { ...formItemLayout, label: '账号' },
         component: <Input />,
       },{
         opts: {
