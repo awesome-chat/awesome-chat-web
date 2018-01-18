@@ -68,4 +68,11 @@ export default {
     console.log('data', data)
     return io.put('/dep', data).then(handleError);
   },
+
+
+  // verify
+  verifyAdmin(data = {}) {
+    console.log('data', data)
+    return io.post('/verify/admin', data).then(handleError);
+  },
 }

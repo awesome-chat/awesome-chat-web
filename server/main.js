@@ -6,7 +6,9 @@ const webpack = require('webpack');
 const webpackConfig = require('../config/dev.webpack.config');
 const bodyParser = require('body-parser');
 
-let router = require('./router');
+const watch = require('./utils/watch')
+const router = require('./router');
+let auth = require('./middlewares/auth')
 
 const app = express();
 app.use(bodyParser.json())
@@ -30,7 +32,15 @@ if (process.env.NODE_ENV === 'development') {
   app.use(hotMiddleware);
 }
 
+app.use(auth)
+
 router(app)
+
+watch([
+  './middlewares/auth'
+], () => {
+  auth = require('./middlewares/auth')
+})
 
 io.on('connection', (socket) => {
   console.log('connection', socket.id)
