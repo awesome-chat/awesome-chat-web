@@ -13,7 +13,7 @@ router.post('/user', (req, res) => {
   ep.on('authUser', (user) => {
     console.log(user)
     const token = jwt.sign(
-      { exp: Math.floor(Date.now() / 1000) + (60 * 60) },
+      { exp: Math.floor(Date.now() / 1000) + (7 * 24 * 60 * 60) },
       'secret'
     );
 
@@ -44,8 +44,6 @@ router.post('/user', (req, res) => {
   });
 });
 
-
-
 router.post('/admin', (req, res) => {
   const ep = new eventproxy();
 
@@ -53,7 +51,7 @@ router.post('/admin', (req, res) => {
   ep.on('authAdmin', (user) => {
     console.log(user)
     jwt.sign(
-      { exp: Math.floor(Date.now() / 1000) + (7 * 60 * 60) },
+      { exp: Math.floor(Date.now() / 1000) + (7 * 24 * 60 * 60) },
       'secret',
       (err, token) => {
         if (err) {
