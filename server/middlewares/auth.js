@@ -28,10 +28,23 @@ module.exports = (req, res, next) => {
       const decoded = jwt.verify(authorization_admin, 'secret');
       console.log('decoded', decoded)
     } catch (err) {
+      console.log(err)
       res.send({
         code: 2
       })
+    }
+  }
+
+  // 验证管理员权限
+  if (authorization_user) {
+    try {
+      const decoded = jwt.verify(authorization_user, 'secret');
+      console.log('decoded', decoded)
+    } catch (err) {
       console.log(err)
+      res.send({
+        code: 2
+      })
     }
   }
   next();

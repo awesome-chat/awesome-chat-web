@@ -14,13 +14,12 @@ router.post('/user', (req, res) => {
     console.log(user)
     const token = jwt.sign(
       { exp: Math.floor(Date.now() / 1000) + (60 * 60) },
-      'auth token create',
-      { algorithm: 'RS256' }
+      'secret'
     );
 
-    res.setHeaders({
-      Authorization: token
-    })
+    console.log('token', token)
+    res.setHeader('authorization_user', token)
+
     res.send({
       code: 0,
     })
@@ -44,6 +43,8 @@ router.post('/user', (req, res) => {
     console.log(err);
   });
 });
+
+
 
 router.post('/admin', (req, res) => {
   const ep = new eventproxy();
