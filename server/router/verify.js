@@ -8,32 +8,30 @@ const router = express.Router()
 
 router.post('/user', (req, res) => {
   const ep = new eventproxy();
+  const { userMisId, userPwd } = req.body;
 
   // 用户授权
   ep.on('authUser', (user) => {
-    console.log(user)
     const token = jwt.sign(
       { exp: Math.floor(Date.now() / 1000) + (7 * 24 * 60 * 60) },
       'secret'
     );
-
-    console.log('token', token)
     res.setHeader('authorization_user', token)
-
     res.send({
       code: 0,
+      data: user
     })
   });
 
-  const { userMisId, userPwd } = req.body;
   User.findAll({
+    attributes: ['userName', 'userMisId', 'userMisId', 'userSex', 'userId', 'userTel', 'userSign', 'userWorkPlace', 'userExt'],
     where: {
       userMisId,
       userPwd
     }
   }).then((d) => {
     if (d.length > 0) {
-      ep.emit('authUser', d[0]);
+      ep.emit('authUser', JSON.parse(JSON.stringify(d[0])));
     } else {
       res.send({
         code: 1,

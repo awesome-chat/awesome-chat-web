@@ -13,6 +13,10 @@ const user = sequelize.define('user', {
   userMisId: Sequelize.STRING(255),
   userTel: Sequelize.STRING(255),
   userPwd: Sequelize.STRING(255),
+  userSign: Sequelize.STRING(255),
+  userExt: Sequelize.STRING(255),
+  userWorkPlace: Sequelize.STRING(255),
+  userSex: Sequelize.BIGINT(11),
   companyId: Sequelize.BIGINT(11),
   depId: Sequelize.BIGINT(11),
 }, {

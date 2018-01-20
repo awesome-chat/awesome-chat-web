@@ -1,6 +1,7 @@
 const express = require('express')
 const Sequelize = require('sequelize')
 const { User, Dep } = require('../models')
+const eventproxy = require('eventproxy')
 
 const router = express.Router()
 
@@ -33,18 +34,59 @@ router.get('/', (req, res) => {
 
 router.get('/:userId', (req, res) => {
   const { userId } = req.params
+  const ep = new eventproxy();
+
+  // 查询用户上级
+  ep.on('userLeader', (user) => {
+    if (user.dep.depOwnerId === parseInt(userId, 10) && user.dep.depParentId !== 0) {
+      // 为部门负责人
+      Dep.findAll({
+        where: {
+          depId: user.dep.depParentId
+        },
+        include: [{
+          model: User,
+          attributes: ['userName', 'userId'],
+          where: { depOwnerId: Sequelize.col('user.userId') }
+        }]
+      }).then((d) => {
+        user.userLeader = JSON.parse(JSON.stringify(d[0])).user
+        res.send({
+          code: 0,
+          data: user
+        })
+      })
+    } else {
+      // 非部门负责人
+      User.findAll({
+        attributes: ['userId', 'userName'],
+        where: {
+          userId: user.dep.depOwnerId
+        },
+      }).then((d) => {
+        user.userLeader = JSON.parse(JSON.stringify(d[0]))
+        res.send({
+          code: 0,
+          data: user
+        })
+      })
+    }
+
+  });
+
   User.findAll({
     where: {
       userId
     },
-    attributes: ['userName', 'userId', 'userTel'],
+    attributes: ['userName', 'userMisId', 'userMisId', 'userSex', 'userId', 'userTel', 'userSign', 'userWorkPlace', 'userExt'],
     include: [{
       model: Dep,
-      attributes: ['depId'],
+      attributes: ['depId', 'depName', 'depOwnerId', 'depParentId'],
       where: { depId: Sequelize.col('dep.depId') }
     }]
   }).then((d) => {
-    res.send(JSON.stringify(d[0]))
+    const user = JSON.parse(JSON.stringify(d[0]))
+    ep.emit('userLeader', user);
   }).catch((err) => {
     console.log(err);
   });
