@@ -9,8 +9,9 @@ const room = sequelize.define('room', {
     unique: true,
     autoIncrement: true
   },
-  roomNamet: Sequelize.STRING(255),
+  roomName: Sequelize.STRING(255),
   roomIntro: Sequelize.STRING(255),
+  roomMemberId: Sequelize.STRING(255),
 }, {
   timestamps: false
 });
