@@ -1,5 +1,6 @@
 
 const socketIo = require('socket.io')
+const { Message, RoomToUser } = require('../models')
 
 const roomUser = {}
 const onlineUser = {}
@@ -12,10 +13,9 @@ module.exports = (http) => {
     console.log('in connection')
     let roomId = ''
 
-    socket.on('join', (data) => {
-      console.log(typeof data)
-
-
+    socket.on('join', (roomId) => {
+      console.log('roomId', roomId)
+      socket.join(roomId)
     });
 
     // 监听来自客户端的消息
@@ -24,23 +24,36 @@ module.exports = (http) => {
         userId,
         roomId,
         otherSideId,
-        msg
+        content,
+        time
       } = data
       console.log('data', data)
-      console.log('roomUser', roomUser)
-      console.log('onlineUser', onlineUser)
       // 判断对方是否在线
       if (onlineUser[otherSideId]) {
+        console.log('online')
         // 判断该房间是否存在
         if (!roomUser[roomId]) {
           roomUser[roomId] = {}
         }
         // 表示该用户在线
         roomUser[roomId][userId] = true
-
-        socket.to(roomId).emit('sys', msg);
+        socket.broadcast.to(roomId).emit('sys', content);
+        // socket.emit('sys', content);
       } else {
-        // 把聊天记录存在服务端
+        console.log('offline')
+        Message.upsert({
+          // 把聊天记录存在服务端
+          messageContent: content,
+          messageFromId: userId,
+          messageToId: roomId,
+          createTime: time
+        }, {
+          plain: true
+        }).then((d) => {
+          console.log('success')
+        }).catch((err) => {
+          console.log(err);
+        });
       }
     });
 
@@ -48,15 +61,16 @@ module.exports = (http) => {
     socket.on('disconnect', () => {
       // 从房间名单中移除
       socket.leave(roomId, (err) => {
+        console.log('leave')
         if (err) {
-          log.error(err);
-        } else {
-          var index = roomUser[roomId].indexOf(user);
-          if (index !== -1) {
-            roomUser[roomId].splice(index, 1);
-            socket.to(roomId).emit('sys', user + '退出了房间');
-          }
+          console.log(err);
         }
+        //   var index = roomUser[roomId].indexOf(user);
+        //   if (index !== -1) {
+        //     roomUser[roomId].splice(index, 1);
+        //     socket.to(roomId).emit('sys', user + '退出了房间');
+        //   }
+        // }
       });
     });
   });
