@@ -10,10 +10,11 @@ class Test extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userId: 5,
-      roomId: '1-5',
+      userId: 4,
+      roomId: '1-4',
       otherSideId: 1,
       content: '',
+      userName: '李若月'
     };
   }
 
@@ -36,12 +37,14 @@ class Test extends Component {
       roomId,
       otherSideId,
       content,
+      userName,
     } = this.state;
     const data = {
       userId,
       roomId,
       otherSideId,
       content,
+      userName,
       time: Date.parse(new Date())
     }
     this.sendMessage(data)
@@ -54,7 +57,7 @@ class Test extends Component {
   }
 
   render() {
-    const { userId, content, roomId, otherSideId } = this.state;
+    const { userId, content, roomId, otherSideId, userName } = this.state;
     return (
       <div className="login">
         <h1>Test</h1>
@@ -63,6 +66,7 @@ class Test extends Component {
             <Input onChange={this.handleChangeState.bind(this, 'roomId')} style={{ margin: '10px 0' }} value={roomId} placeholder="roomId" />
             <Input onChange={this.handleChangeState.bind(this, 'otherSideId')} style={{ margin: '10px 0' }} value={otherSideId} placeholder="otherSideId" />
             <Input onChange={this.handleChangeState.bind(this, 'userId')} style={{ margin: '10px 0' }} value={userId} placeholder="userId" />
+            <Input onChange={this.handleChangeState.bind(this, 'userName')} style={{ margin: '10px 0' }} value={userName} placeholder="userName" />
             <Input onChange={this.handleChangeState.bind(this, 'content')} style={{ margin: '10px 0' }} value={content} placeholder="content" />
             <Button onClick={this.handleSubmit}>提交</Button>
           </Card>

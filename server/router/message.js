@@ -5,16 +5,23 @@ const eventproxy = require('eventproxy')
 
 const router = express.Router()
 
-router.get('/:userId', (req, res) => {
+router.get('/:userId/after/:lastUpdateTime', (req, res) => {
   const ep = new eventproxy();
+  const { userId, lastUpdateTime } = req.params;
   // 获取该用户所有未读信息
   ep.on('finish', (roomIds) => {
-    console.log(roomIds)
     const newRoomIds = roomIds.map(d => ({ messageToId: d.roomId }))
-    console.log(newRoomIds)
     Message.findAll({
       where: {
-        [Sequelize.Op.or]: newRoomIds
+        [Sequelize.Op.and]: {
+          [Sequelize.Op.or]: newRoomIds,
+          createTime: {
+            [Sequelize.Op.and]: {
+              [Sequelize.Op.gte]: Number(lastUpdateTime),
+              [Sequelize.Op.lte]: Number(Date.parse(new Date()))
+            }
+          }
+        },
       },
       include: [{
         model: User,
@@ -22,7 +29,6 @@ router.get('/:userId', (req, res) => {
         where: { messageFromId: Sequelize.col('user.userId') }
       }]
     }).then((d) => {
-      console.log('return',JSON.parse(JSON.stringify(d)))
       res.send({
         code: 0,
         data: JSON.parse(JSON.stringify(d))
@@ -34,11 +40,10 @@ router.get('/:userId', (req, res) => {
   // 获取roomId
   RoomToUser.findAll({
     where: {
-      userId: req.params.userId
+      userId
     },
     attributes: ['roomId']
   }).then((d) => {
-    console.log('d', JSON.parse(JSON.stringify(d)))
     ep.emit('finish', JSON.parse(JSON.stringify(d)))
   }).catch((err) => {
     console.log(err);
