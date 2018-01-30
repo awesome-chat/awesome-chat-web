@@ -5,22 +5,20 @@ const eventproxy = require('eventproxy')
 
 const router = express.Router()
 
-router.get('/from/:userId/to/:otherSideId', (req, res) => {
+router.post('/create', (req, res) => {
   const ep = new eventproxy()
-  const { userId, otherSideId } = req.params
-  const roomId = [userId, otherSideId].sort((a, b) => a - b).join('-')
+  const { userId, otherIds } = req.body
+  const allIds = [userId].concat(otherIds).sort((a, b) => a - b)
+  console.log(allIds, userId, otherIds)
+  const roomId = allIds.join('-')
 
   ep.on('createRoom', () => {
-    let finishUpsert = false;
-    let finishBulkCreate = false;
 
     ep.on('finish', () => {
-      if (finishBulkCreate && finishUpsert) {
-        res.send({
-          code: 0,
-          roomId
-        })
-      }
+      res.send({
+        code: 0,
+        roomId
+      })
     })
 
     Room.upsert({
@@ -28,21 +26,15 @@ router.get('/from/:userId/to/:otherSideId', (req, res) => {
     }, {
       plain: true
     }).then(() => {
-      finishBulkCreate = true;
-      ep.emit('finish')
-    }).catch((err) => {
-      console.log(err);
-    });
-
-    // 创建room和user的映射
-    RoomToUser.bulkCreate([
-      { roomId, userId },
-      { roomId, userId: otherSideId }
-    ], {
-      plain: true
-    }).then(() => {
-      finishUpsert = true;
-      ep.emit('finish')
+      // 创建room和user的映射
+      const query = allIds.map(d => ({ roomId, userId:d }))
+      RoomToUser.bulkCreate(query, {
+        plain: true
+      }).then(() => {
+        ep.emit('finish')
+      }).catch((err) => {
+        console.log(err);
+      });
     }).catch((err) => {
       console.log(err);
     });

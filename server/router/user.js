@@ -71,7 +71,6 @@ router.get('/:userId', (req, res) => {
         })
       })
     }
-
   });
 
   User.findAll({
@@ -91,6 +90,35 @@ router.get('/:userId', (req, res) => {
     console.log(err);
   });
 });
+
+router.get('/search/:value', (req, res) => {
+  const { value } = req.params
+  User.findAll({
+    where: {
+      [Sequelize.Op.or]: [
+        {
+          userName: {
+            [Sequelize.Op.like]: `%${value}%`
+          }
+        },
+        {
+          userMisId: {
+            [Sequelize.Op.like]: `%${value}%`
+          }
+        },
+      ]
+    },
+    attributes: ['userMisId','userName','userId'],
+  }).then((d) => {
+    console.log(JSON.parse(JSON.stringify(d)))
+    res.send({
+      code: 0,
+      data: JSON.parse(JSON.stringify(d))
+    })
+  }).catch((err) => {
+    console.log(err);
+  });
+})
 
 router.post('/', (req, res) => {
   const body = req.body;
