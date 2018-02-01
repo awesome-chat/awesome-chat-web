@@ -110,7 +110,6 @@ router.get('/search/:value', (req, res) => {
     },
     attributes: ['userMisId','userName','userId'],
   }).then((d) => {
-    console.log(JSON.parse(JSON.stringify(d)))
     res.send({
       code: 0,
       data: JSON.parse(JSON.stringify(d))
@@ -136,7 +135,6 @@ router.post('/', (req, res) => {
 
 router.put('/', (req, res) => {
   const body = req.body;
-  console.log(req.params, body)
   User.update({
     userName: body.userName,
     userTel: body.userTel,
@@ -149,6 +147,42 @@ router.put('/', (req, res) => {
   }).catch((err) => {
     console.log(err);
   });
+});
+
+
+router.post('/password', (req, res) => {
+  const {
+    newPwd,
+    oldPwd,
+    userId
+  } = req.body;
+
+  User.findAll({
+    where: {
+      userId,
+      userPwd: oldPwd
+    }
+  }).then((d) => {
+    if (d.length > 0) {
+      User.update({
+        userPwd: newPwd
+      }, {
+        where: { userId },
+        plain: true
+      }).then((d) => {
+        res.send({
+          code: 0
+        })
+      }).catch((err) => {
+        console.log(err);
+      });
+    } else {
+      res.send({
+        code: 1,
+        msg: '旧密码不正确'
+      })
+    }
+  })
 });
 
 module.exports = router
