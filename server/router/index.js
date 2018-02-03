@@ -9,6 +9,7 @@ let dep = require('./dep')
 let verify = require('./verify')
 let room = require('./room')
 let message = require('./message')
+let img = require('./img')
 
 module.exports = (app) => {
   app.get('/', (req, res) => {
@@ -25,6 +26,7 @@ module.exports = (app) => {
   // 静态文件
   app.get('/static/*', (req, res) => {
     const filePath = `${staticDir}${req.url.split('/static')[1]}`;
+    console.log('filePath', filePath)
     res.sendFile(filePath);
   });
 
@@ -34,6 +36,7 @@ module.exports = (app) => {
   app.use('/verify', (req, res, next) => verify(req, res, next))
   app.use('/room', (req, res, next) => room(req, res, next))
   app.use('/message', (req, res, next) => message(req, res, next))
+  app.use('/img', (req, res, next) => img(req, res, next))
 
   chokidar.watch(path.join(__dirname, '/')).on('change', (path) => {
     console.log(`file changed: ${path}`);
@@ -44,7 +47,8 @@ module.exports = (app) => {
       require.resolve('./dep.js'),
       require.resolve('./verify.js'),
       require.resolve('./room.js'),
-      require.resolve('./message.js')
+      require.resolve('./message.js'),
+      require.resolve('./img.js')
     ];
     const modules = ids.map(id => require.cache[id])
 
@@ -60,5 +64,6 @@ module.exports = (app) => {
     verify = require('./verify')
     room = require('./room')
     message = require('./message')
+    img = require('./img')
   })
 }

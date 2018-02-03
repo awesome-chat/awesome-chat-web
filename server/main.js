@@ -13,6 +13,7 @@ let socket = require('./socket')
 
 const app = express();
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const http = require('http').Server(app);
 

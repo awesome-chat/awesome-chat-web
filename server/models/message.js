@@ -12,7 +12,8 @@ const message = sequelize.define('message', {
   messageContent: Sequelize.STRING(255),
   messageFromId: Sequelize.BIGINT(11),
   messageToId: Sequelize.BIGINT(11),
-  createTime: Sequelize.STRING(255),
+  createTime: Sequelize.BIGINT(20),
+  isPic: Sequelize.BIGINT(11),
 }, {
   timestamps: false
 });

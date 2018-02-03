@@ -45,7 +45,7 @@ router.post('/user', (req, res) => {
 router.post('/admin', (req, res) => {
   const ep = new eventproxy();
 
-  // 用户授权
+  // 管理员授权
   ep.on('authAdmin', (user) => {
     console.log(user)
     jwt.sign(
