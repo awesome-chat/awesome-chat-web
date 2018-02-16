@@ -13,7 +13,15 @@ const baseConfig = {
       include: [alias['@client']],
       loader: 'babel-loader',
       query: {
-        presets: ['es2015', 'stage-0', 'react'],
+        presets: [
+          ['env', {
+            'targets': {
+              'node': 'current'
+            }
+          }],
+          'stage-0',
+          'react'
+        ],
         plugins: ['transform-decorators-legacy']
       }
     }, {
@@ -22,14 +30,8 @@ const baseConfig = {
         loader: 'style-loader'
       }, {
         loader: 'css-loader',
-        options: {
-          sourceMap: true
-        }
       }, {
         loader: 'sass-loader',
-        options: {
-          sourceMap: true
-        }
       }],
       exclude: /node_modules/,
     }, {

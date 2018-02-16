@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Input, Card, Button, Spin } from 'antd';
-import Form from 'ant-form'
-import api from '@client/utils/api'
+import { Input, Card, Button } from 'antd';
+// import api from '@client/utils/api'
 import io from 'socket.io-client';
 
 const socket = io('http://localhost:3000');
