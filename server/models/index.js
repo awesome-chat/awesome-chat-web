@@ -5,6 +5,7 @@ const Admin = require('./admin')
 const Message = require('./message')
 const Room = require('./room')
 const RoomToUser = require('./room_to_user')
+const Feedback = require('./feedback')
 
 Company.belongsTo(User, { foreignKey: 'companyOwnerId', targetKey: 'userId' });
 Dep.belongsTo(User, { foreignKey: 'depOwnerId', targetKey: 'userId' });
@@ -22,4 +23,5 @@ module.exports = {
   Message,
   Room,
   RoomToUser,
+  Feedback,
 }
