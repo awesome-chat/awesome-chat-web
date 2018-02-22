@@ -6,6 +6,7 @@ const Message = require('./message')
 const Room = require('./room')
 const RoomToUser = require('./room_to_user')
 const Feedback = require('./feedback')
+const Attendance = require('./attendance')
 
 Company.belongsTo(User, { foreignKey: 'companyOwnerId', targetKey: 'userId' });
 Dep.belongsTo(User, { foreignKey: 'depOwnerId', targetKey: 'userId' });
@@ -24,4 +25,5 @@ module.exports = {
   Room,
   RoomToUser,
   Feedback,
+  Attendance
 }

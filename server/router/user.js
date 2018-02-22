@@ -1,6 +1,6 @@
 const express = require('express')
 const Sequelize = require('sequelize')
-const { User, Dep, Feedback } = require('../models')
+const { User, Dep, Feedback, Attendance, } = require('../models')
 const eventproxy = require('eventproxy')
 
 const router = express.Router()
@@ -145,6 +145,48 @@ router.post('/feedback', (req, res) => {
     fbUserName,
     fbContent,
     fbTime
+  }).then((d) => {
+    res.send({
+      code: 0,
+      msg:d
+    })
+  }).catch((err) => {
+    console.log(err);
+  });
+});
+
+router.post('/paganname', (req, res) => {
+  const {
+    userId,
+    userSign,
+  } = req.body;
+  User.update({
+    userSign
+  }, {
+    where: { userId },
+    plain: true
+  }).then((d) => {
+    res.send({
+      code: 0,
+      msg:d
+    })
+  }).catch((err) => {
+    console.log(err);
+  });
+});
+
+router.post('/cottage', (req, res) => {
+  const {
+    userId,
+    strikeTime,
+    hasCottage,
+    cottageReason,
+  } = req.body;
+  Attendance.upsert({
+    userId,
+    strikeTime,
+    hasCottage,
+    cottageReason,
   }).then((d) => {
     res.send({
       code: 0,
