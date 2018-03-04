@@ -24,7 +24,7 @@ router.post('/user', (req, res) => {
   });
 
   User.findAll({
-    attributes: ['userName', 'userMisId', 'userMisId', 'userSex', 'userId', 'userTel', 'userSign', 'userWorkPlace', 'userExt'],
+    attributes: ['userAvatar', 'userName', 'userMisId', 'userMisId', 'userSex', 'userId', 'userTel', 'userSign', 'userWorkPlace', 'userExt'],
     where: {
       userMisId,
       userPwd

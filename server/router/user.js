@@ -77,7 +77,7 @@ router.get('/:userId', (req, res) => {
     where: {
       userId
     },
-    attributes: ['userName', 'userMisId', 'userMisId', 'userSex', 'userId', 'userTel', 'userSign', 'userWorkPlace', 'userExt'],
+    attributes: ['userAvatar', 'userName', 'userMisId', 'userMisId', 'userSex', 'userId', 'userTel', 'userSign', 'userWorkPlace', 'userExt'],
     include: [{
       model: Dep,
       attributes: ['depId', 'depName', 'depOwnerId', 'depParentId'],

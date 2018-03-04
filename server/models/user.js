@@ -11,6 +11,7 @@ const user = sequelize.define('user', {
   },
   userName: Sequelize.STRING(255),
   userMisId: Sequelize.STRING(255),
+  userAvatar: Sequelize.STRING(255),
   userTel: Sequelize.STRING(255),
   userPwd: Sequelize.STRING(255),
   userSign: Sequelize.STRING(255),

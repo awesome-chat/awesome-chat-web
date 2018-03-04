@@ -134,7 +134,7 @@ router.get('/child/:depId', (req, res) => {
     },
     include: [{
       model: User,
-      attributes: ['userName', 'userId'],
+      attributes: ['userName', 'userId', 'userAvatar'],
       where: { depOwnerId: Sequelize.col('user.userId') }
     }]
   }).then((d) => {
