@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Table, Input, Breadcrumb } from 'antd'
+import { Table, Input, Breadcrumb, message } from 'antd'
 import { Link } from 'react-router-dom'
 import Form from 'ant-form'
+import api from '@client/utils/api'
 
 
 class AttendanceList extends Component {
@@ -25,6 +26,7 @@ class AttendanceList extends Component {
         items: [{
           key: 'search',
           props: {
+            style: {},
             type: 'primary',
             htmlType: 'submit',
           },
@@ -35,73 +37,62 @@ class AttendanceList extends Component {
         opts: {
           initialValue: '',
         },
-        name: 'name',
+        name: 'userName',
         props: { ...formItemLayout, label: '员工姓名' },
         component: <Input />,
       },{
         opts: {
           initialValue: '',
         },
-        name: 'id',
+        name: 'userId',
         props: { ...formItemLayout, label: '员工ID' },
-        component: <Input />,
-      },{
-        opts: {
-          initialValue: '',
-        },
-        name: 'department',
-        props: { ...formItemLayout, label: '部门' },
         component: <Input />,
       },]
     }
 
     this.columns = [{
       title: '姓名',
-      dataIndex: 'name',
-      key: 'name',
-      width: '25%',
+      dataIndex: 'userName',
+      width: '33%',
     }, {
       title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-      width: '25%',
+      dataIndex: 'userId',
+      width: '33%',
     }, {
       title: '部门',
-      dataIndex: 'department',
-      key: 'department',
+      dataIndex: 'dep.depName',
+      key: 'dep.depName',
       width: '25%',
     }, {
       title: '操作',
       dataIndex: 'operate',
       key: 'operate',
-      render: () => (
+      render: (t, r) => (
         <div>
-          <Link to="/attendance/detail">查看详情</Link>
+          <Link to={`/attendance/detail/${r.userId}`}>查看详情</Link>
         </div>
       ),
       width: '25%',
     }];
   }
 
-  componentDidMount() {
-    this.fetchData();
-  }
 
-  fetchData = () => {
-    const dataSource = [{
-      key: '1',
-      name: '胡彦斌',
-      id: 32,
-      department: '西湖区湖底公园1号'
-    }, {
-      key: '2',
-      name: '胡彦祖',
-      id: 42,
-      department: '西湖区湖底公园1号'
-    }];
-
-    this.setState({
-      dataSource
+  handleUserSubmit = (err, values) => {
+    if (err) {
+      return
+    }
+    console.log(values)
+    api.getUserList({
+      ...values
+    }).then(({ data }) => {
+      if (data.code === 0) {
+        this.setState({
+          dataSource: data.data
+        })
+        message.success('查询成功')
+      } else {
+        message.success('查询失败请重试')
+      }
     })
   }
 
@@ -115,7 +106,7 @@ class AttendanceList extends Component {
         <h1 className="page-title">考勤查询</h1>
         <Form
           formConfig={this.formConfig}
-          onSubmit={(err, values) => { console.log(err || values) }}
+          onSubmit={this.handleUserSubmit}
         />
         <Table
           style={{ marginTop: '20px' }}

@@ -59,6 +59,9 @@ export default {
     return io.put('/user', data).then(handleVerify);
   },
 
+  getAttendance(data = {}) {
+    return io.post('/attendance/detail', data).then(handleVerify);
+  },
 
   // dep
   getDepDetail(data = {}) {

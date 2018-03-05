@@ -125,7 +125,7 @@ class App extends Component {
                 <Route exact path="/" component={CompanyDetail} />
                 <Route path="/company/edit" component={CompanyEdit} />
                 <Route path="/attendance/list" component={AttendanceList} />
-                <Route path="/attendance/detail" component={AttendanceDetail} />
+                <Route path="/attendance/detail/:userId" component={AttendanceDetail} />
                 <Route path="/org/edit" component={OrgEdit} />
                 <Route path="/org/dep/edit/:depId" component={OrgDepEdit} />
                 <Route path="/org/dep/add" component={OrgDepEdit} />
