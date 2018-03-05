@@ -16,7 +16,10 @@ router.get('/', (req, res) => {
       where: { companyOwnerId: Sequelize.col('user.userId') }
     }]
   }).then((d) => {
-    res.send(JSON.stringify(d[0]))
+    res.send({
+      code: 0,
+      data: JSON.parse(JSON.stringify(d[0]))
+    })
   }).catch((err) => {
     console.log(err);
   });
@@ -34,7 +37,10 @@ router.put('/', (req, res) => {
     where: { companyId: 1 },
     plain: true
   }).then((d) => {
-    res.send(d)
+    res.send({
+      code: 0,
+      data: d
+    })
   }).catch((err) => {
     console.log(err);
   });

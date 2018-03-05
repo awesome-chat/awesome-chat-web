@@ -141,9 +141,9 @@ class OrgEdit extends Component {
     api.getUserList({
       ...values
     }).then(({ data }) => {
-      if (data) {
+      if (data.code === 0) {
         this.setState({
-          userDataSource: data
+          userDataSource: data.data
         })
         message.success('查询成功')
       } else {
@@ -159,16 +159,15 @@ class OrgEdit extends Component {
     if (err) {
       return
     }
-    console.log(values)
     this.setState({
       loadingUser: true,
     })
     api.getDepList({
       ...values
     }).then(({ data }) => {
-      if (data) {
+      if (data.code === 0) {
         this.setState({
-          depDataSource: data
+          depDataSource: data.data
         })
         message.success('查询成功')
       } else {

@@ -54,7 +54,7 @@ class CompanyDetail extends Component {
   fetchData = () => {
     api.getCompanyDetail().then(({ data }) => {
       this.setState({
-        data,
+        data: data.data,
         loading: false,
       })
     })

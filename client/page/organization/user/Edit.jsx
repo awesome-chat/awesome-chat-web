@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Breadcrumb, Select, Spin, message } from 'antd';
+import { Input, Breadcrumb, Select, Spin, message, Icon } from 'antd';
 import Form from 'ant-form'
 import api from '@client/utils/api'
 
@@ -25,7 +25,7 @@ class UserEdit extends Component {
       userId: this.userId
     }).then(({ data }) => {
       this.setState({
-        user: data,
+        user: data.data,
       })
     })
   }
@@ -33,7 +33,7 @@ class UserEdit extends Component {
   fetchDep = () => {
     api.getDepList().then(({ data }) => {
       this.setState({
-        deps: data,
+        deps: data.data,
         loading: false,
       })
     })
@@ -87,6 +87,7 @@ class UserEdit extends Component {
       },{
         opts: {
           initialValue: user.dep && String(user.dep.depId) || '',
+          rules: [{ required: true, message: '请选择所属部门!'}],
         },
         name: 'depId',
         props: { ...formItemLayout, label: '所属部门' },
@@ -121,7 +122,7 @@ class UserEdit extends Component {
         ...values,
         userId: this.userId,
       }).then(({ data }) => {
-        if (data) {
+        if (data.code === 0) {
           message.success('操作成功')
         } else {
           message.success('操作失败请重试')
@@ -134,7 +135,7 @@ class UserEdit extends Component {
       api.addUser({
         ...values
       }).then(({ data }) => {
-        if (data) {
+        if (data.code === 0) {
           message.success('操作成功')
         } else {
           message.success('操作失败请重试')
@@ -155,6 +156,7 @@ class UserEdit extends Component {
           <Breadcrumb.Item>{this.isEdit ? '员工信息修改' : '新增员工'}</Breadcrumb.Item>
         </Breadcrumb>
         <h1 className="page-title">{this.isEdit ? '员工信息修改' : '新增员工'}</h1>
+        {this.isEdit ? null : <div style={{ color: '#FA3E4B', margin: '10px 100px' }}><Icon type="exclamation-circle" /> 请先新增部门后新增员工</div>}
         <Spin spinning={this.state.loading}>
           <Form
             formConfig={this.formConfig}

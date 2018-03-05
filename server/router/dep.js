@@ -24,7 +24,10 @@ router.get('/', (req, res) => {
     where: queryConditions,
     attributes: ['depName', 'depId'],
   }).then((d) => {
-    res.send(JSON.stringify(d))
+    res.send({
+      code: 0,
+      data: JSON.parse(JSON.stringify(d))
+    })
   }).catch((err) => {
     console.log(err);
   });
@@ -37,7 +40,10 @@ router.get('/:depId', (req, res) => {
       depId
     },
   }).then((d) => {
-    res.send(JSON.stringify(d[0]))
+    res.send({
+      code: 0,
+      data: JSON.parse(JSON.stringify(d[0]))
+    })
   }).catch((err) => {
     console.log(err);
   });
@@ -52,7 +58,10 @@ router.post('/', (req, res) => {
     depParentId: body.depParentId || null,
     companyId: 1,
   }).then((d) => {
-    res.send(d)
+    res.send({
+      code: 0,
+      data: d
+    })
   }).catch((err) => {
     console.log(err);
   });
@@ -69,7 +78,10 @@ router.put('/', (req, res) => {
     where: { depId: body.depId },
     plain: true
   }).then((d) => {
-    res.send(d)
+    res.send({
+      code: 0,
+      data: d
+    })
   }).catch((err) => {
     console.log(err);
   });
@@ -85,8 +97,6 @@ router.get('/child/:depId', (req, res) => {
         depId: dep.depId
       },
     }).then((d) => {
-      console.log('----------------------')
-      console.log(JSON.stringify(d), dep.user.userId)
       if (d.length > 0) {
         res.send({
           code: 0,
@@ -109,7 +119,6 @@ router.get('/child/:depId', (req, res) => {
         depParentId: dep.depId
       },
     }).then((d) => {
-      console.log(JSON.stringify(d))
       if (d.length > 0) {
         res.send({
           code: 0,

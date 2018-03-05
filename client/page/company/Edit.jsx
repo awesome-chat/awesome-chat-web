@@ -22,7 +22,7 @@ class CompanyEdit extends Component {
   fetchUser = () => {
     api.getUserList().then(({ data }) => {
       this.setState({
-        user: data,
+        user: data.data,
       })
     })
   }
@@ -30,7 +30,7 @@ class CompanyEdit extends Component {
   fetchData = () => {
     api.getCompanyDetail().then(({ data }) => {
       this.setState({
-        data,
+        data: data.data,
         loading: false,
       })
     })
@@ -46,7 +46,7 @@ class CompanyEdit extends Component {
     api.updateCompanyDetail({
       ...values
     }).then(({ data }) => {
-      if (data) {
+      if (data.code === 0) {
         message.success('操作成功')
       } else {
         message.success('操作失败请重试')

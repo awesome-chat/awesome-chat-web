@@ -6,7 +6,6 @@ const eventproxy = require('eventproxy')
 const router = express.Router()
 
 router.get('/', (req, res) => {
-  console.log(req.query)
   const {
     userId = null,
     userName = null
@@ -26,7 +25,10 @@ router.get('/', (req, res) => {
     where: queryConditions,
     attributes: ['userName', 'userId'],
   }).then((d) => {
-    res.send(JSON.stringify(d))
+    res.send({
+      code: 0,
+      data: JSON.parse(JSON.stringify(d))
+    })
   }).catch((err) => {
     console.log(err);
   });
@@ -127,7 +129,10 @@ router.post('/', (req, res) => {
     depId: body.depId || null,
     companyId: 1,
   }).then((d) => {
-    res.send(d)
+    res.send({
+      code: 0,
+      data: d
+    })
   }).catch((err) => {
     console.log(err);
   });
@@ -207,7 +212,10 @@ router.put('/', (req, res) => {
     where: { userId: body.userId },
     plain: true
   }).then((d) => {
-    res.send(d)
+    res.send({
+      code: 0,
+      data:d
+    })
   }).catch((err) => {
     console.log(err);
   });

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Breadcrumb, Select, message, Spin } from 'antd';
+import { Input, Breadcrumb, Select, message, Spin, Icon } from 'antd';
 import Form from 'ant-form'
 import api from '@client/utils/api'
 
@@ -27,7 +27,7 @@ class DepAdd extends Component {
       depId: this.depId
     }).then(({ data }) => {
       this.setState({
-        dep: data,
+        dep: data.data,
       })
     })
   }
@@ -35,7 +35,7 @@ class DepAdd extends Component {
   fetchUserList = () => {
     api.getUserList().then(({ data }) => {
       this.setState({
-        users: data,
+        users: data.data,
       })
     })
   }
@@ -43,7 +43,7 @@ class DepAdd extends Component {
   fetchDepList = () => {
     api.getDepList().then(({ data }) => {
       this.setState({
-        deps: data,
+        deps: data.data,
         loading: false,
       })
     })
@@ -61,7 +61,7 @@ class DepAdd extends Component {
         ...values,
         depId: this.depId
       }).then(({ data }) => {
-        if (data) {
+        if (data.code === 0) {
           message.success('操作成功')
         } else {
           message.success('操作失败请重试')
@@ -74,7 +74,7 @@ class DepAdd extends Component {
       api.addDep({
         ...values
       }).then(({ data }) => {
-        if (data) {
+        if (data.code === 0) {
           message.success('操作成功')
         } else {
           message.success('操作失败请重试')
@@ -118,7 +118,7 @@ class DepAdd extends Component {
         opts: {
         },
         name: 'depId',
-        props: { ...formItemLayout, label: '部门名称' },
+        props: { ...formItemLayout, label: '部门ID' },
         component: <span>{this.depId}</span>,
         disabled: !this.isEdit,
       },{
@@ -178,6 +178,7 @@ class DepAdd extends Component {
         </Breadcrumb>
         <h1 className="page-title">{this.isEdit ? '修改部门消息' : '新增部门'}</h1>
         <Spin spinning={this.state.loading}>
+          <div style={{ color: '#FA3E4B', margin: '10px 100px' }}><Icon type="exclamation-circle" /> 部门负责人字段若负责人未创建请不选</div>
           <Form
             formConfig={this.formConfig}
             onSubmit={this.handleSubmit}
