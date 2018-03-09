@@ -1,6 +1,8 @@
 const socketIo = require('socket.io')
 const { Message, RoomToUser, Room } = require('../models')
+const _ = require('lodash')
 const eventproxy = require('eventproxy')
+
 const rooms = {}
 const onlineUser = {}
 
@@ -8,13 +10,21 @@ module.exports = (http) => {
   const io = socketIo(http);
 
   io.on('connection', (socket) => {
-    function broadcastToOnline(roomId, memberIds, content, otherSideName, sysMessage, isPic) {
+    function broadcastToOnline({
+      roomId,
+      otherMemberId,
+      roomMemberId,
+      content,
+      otherSideName,
+      sysMessage,
+      isPic,
+    }) {
       if (!rooms[roomId]) {
         // room不存在的话就创建并添加
         rooms[roomId] = {}
       }
       socket.join(roomId)
-      memberIds.forEach((d) => {
+      otherMemberId.forEach((d) => {
         if (onlineUser[d]) {
           onlineUser[d].join(roomId)
         }
@@ -23,6 +33,7 @@ module.exports = (http) => {
       socket.broadcast.to(roomId).emit('sys', {
         code: 0,
         roomId,
+        roomMemberId,
         content,
         otherSideName,
         sysMessage: sysMessage ? 1 : 0,
@@ -31,13 +42,22 @@ module.exports = (http) => {
       });
     }
 
-    function saveToServer(content, userId, roomId, createTime, sysMessage, isPic) {
+    function saveToServer({
+      content,
+      userId,
+      roomId,
+      roomMemberId,
+      createTime,
+      sysMessage,
+      isPic
+    }) {
       Message.upsert({
         // 把聊天记录存在服务端
         sysMessage: sysMessage ? 1 : 0,
         messageContent: content,
         messageFromId: userId,
-        messageToId: roomId,
+        messageToId: roomMemberId,
+        roomId,
         createTime,
         isPic: isPic ? 1 : 0,
       }, {
@@ -52,71 +72,6 @@ module.exports = (http) => {
     // 初始化userId
     let currentUserId;
 
-    // 创建群
-    socket.on('createGroup', (data) => {
-      const ep = new eventproxy()
-      const { userId, otherIds, content, otherSideName, isGroup, sysMessage, createTime } = data
-      const allIds = [userId].concat(otherIds).sort((a, b) => a - b)
-      console.log(allIds, userId, otherIds)
-      const roomId = allIds.join('-')
-      ep.on('createRoom', () => {
-        Room.upsert({
-          roomId
-        }, {
-          plain: true
-        }).then(() => {
-          // 创建room和user的映射
-          const query = allIds.map(d => ({ roomId, userId:d }))
-          RoomToUser.bulkCreate(query, {
-            plain: true
-          }).then(() => {
-            const memberIds = roomId.split('-').filter(d => d !== String(userId))
-            let isAllOnline = true;
-            let isAllOffline = true;
-            memberIds.forEach((d) => {
-              if (!onlineUser[d]) {
-                isAllOnline = false
-              } else {
-                isAllOffline = false
-              }
-            })
-    
-            if (isAllOnline) {
-              // 所有人都在线
-              broadcastToOnline(roomId, memberIds, content, otherSideName)
-            } else if (isAllOffline) {
-              // 除了自己所有人都不在线
-              broadcastToOnline(roomId, memberIds, content, otherSideName)
-              saveToServer(content, userId, roomId, createTime)
-            } else {
-              // 有人不在线
-              saveToServer(content, userId, roomId, createTime)
-            }
-          }).catch((err) => {
-            console.log(err);
-          });
-        }).catch((err) => {
-          console.log(err);
-        });
-      });
-      Room.findAll({
-        where: {
-          roomId
-        },
-      }).then((d) => {
-        if (d > 0) {
-          res.send({
-            code: 0,
-            roomId
-          })
-        } else {
-          ep.emit('createRoom')
-        }
-      }).catch((err) => {
-        console.log(err);
-      });
-    });
-
     // 上线
     socket.on('online', (userId) => {
       onlineUser[userId] = socket;
@@ -127,25 +82,29 @@ module.exports = (http) => {
 
     // 监听来自客户端的消息
     socket.on('message', (data) => {
+      console.log('---------------')
+      console.log('data:', data)
       const {
         userId,
         roomId,
+        roomMemberId,
         content,
-        createTime,
+        createTime = Date.parse(new Date()),
         userName,
         isGroup = false,
-        otherSideName = '',
-        isPic,
+        isPic = false,
       } = data
       console.log('data', data)
 
       if (isGroup) {
         // 群聊
         // membersId: array
-        const memberIds = roomId.split('-').filter(d => d !== String(userId))
+        const messageItem = _.cloneDeep(data)
+        const otherMemberId = roomMemberId.split('-').filter(d => d !== String(userId))
+        messageItem.otherMemberId = otherMemberId
         let isAllOnline = true;
         let isAllOffline = true;
-        memberIds.forEach((d) => {
+        otherMemberId.forEach((d) => {
           if (!onlineUser[d]) {
             isAllOnline = false
           } else {
@@ -155,18 +114,18 @@ module.exports = (http) => {
 
         if (isAllOnline) {
           // 所有人都在线
-          broadcastToOnline(roomId, memberIds, content, otherSideName, isPic)
+          broadcastToOnline(messageItem)
         } else if (isAllOffline) {
           // 除了自己所有人都不在线
-          broadcastToOnline(roomId, memberIds, content, otherSideName, isPic)
-          saveToServer(content, userId, roomId, createTime, isPic)
+          broadcastToOnline(messageItem)
+          saveToServer(messageItem)
         } else {
           // 有人不在线
-          saveToServer(content, userId, roomId, createTime, isPic)
+          saveToServer(messageItem)
         }
       } else {
         // 单聊
-        const otherSideId = roomId.split('-').filter(d => d !== String(userId))[0]
+        const otherSideId = roomMemberId.split('-').filter(d => d !== String(userId))[0]
         // 判断对方是否在线
         if (onlineUser[otherSideId]) {
           console.log('roomId', roomId, 'rooms', rooms)
@@ -183,6 +142,7 @@ module.exports = (http) => {
           socket.broadcast.to(roomId).emit('sys', {
             code: 0,
             roomId,
+            roomMemberId,
             content,
             otherSideName: userName,
             isPic: isPic ? 1 : 0,
@@ -195,8 +155,8 @@ module.exports = (http) => {
             // 把聊天记录存在服务端
             messageContent: content,
             messageFromId: userId,
-            messageToId: roomId,
-            createTime: createTime,
+            messageToId: roomMemberId,
+            createTime,
             isPic: isPic ? 1 : 0,
           }, {
             plain: true

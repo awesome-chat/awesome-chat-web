@@ -9,8 +9,8 @@ router.get('/:userId/after/:lastUpdateTime', (req, res) => {
   const ep = new eventproxy();
   const { userId, lastUpdateTime } = req.params;
   // 获取该用户所有未读信息
-  ep.on('finish', (roomIds) => {
-    const newRoomIds = roomIds.map(d => ({ messageToId: d.roomId }))
+  ep.on('finish', (roomMemberId) => {
+    const newRoomIds = roomMemberId.map(d => ({ messageToId: d.roomMemberId }))
     Message.findAll({
       where: {
         [Sequelize.Op.and]: {
@@ -42,7 +42,7 @@ router.get('/:userId/after/:lastUpdateTime', (req, res) => {
     where: {
       userId
     },
-    attributes: ['roomId']
+    attributes: ['roomMemberId']
   }).then((d) => {
     ep.emit('finish', JSON.parse(JSON.stringify(d)))
   }).catch((err) => {

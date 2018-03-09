@@ -11,6 +11,8 @@ const rooms_to_users = sequelize.define('rooms_to_users', {
   },
   roomId: Sequelize.BIGINT(11),
   userId: Sequelize.BIGINT(11),
+  roomMemberId: Sequelize.STRING(255),
+  isGroup: Sequelize.BIGINT(11),
 }, {
   timestamps: false
 });

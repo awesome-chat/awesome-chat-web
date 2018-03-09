@@ -9,7 +9,7 @@ const bodyParser = require('body-parser');
 const watch = require('./utils/watch')
 const router = require('./router');
 let auth = require('./middlewares/auth')
-let socket = require('./socket')
+let socket = require('./socket/index')
 
 const app = express();
 app.use(bodyParser.json())
