@@ -27,7 +27,6 @@ router.get('/', (req, res) => {
 
 router.put('/', (req, res) => {
   const body = req.body;
-  console.log(req.params, body)
   Company.update({
     companyName: body.companyName,
     companyOwnerId: body.companyOwnerId,

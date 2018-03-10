@@ -21,7 +21,6 @@ class Test extends Component {
 
   componentDidMount() {
     api.getUserList().then(({ data }) => {
-      console.log(data)
       this.setState({
         userList: data.data
       })
@@ -48,7 +47,6 @@ class Test extends Component {
       userId: currentUserDetail.userId,
       otherIds: [otherSideUserDetail.userId]
     }).then(({ data }) => {
-      console.log('data', data)
       if (data.code === 0) {
         const messageItem = {
           userId: currentUserDetail.userId,
@@ -79,7 +77,6 @@ class Test extends Component {
     } = this.getSelect()
     socket.emit('online', currentUserDetail.userId)
     socket.on('sys', (data) => {
-      console.log('get messsage:', data)
       const newMessage = _.cloneDeep(this.state.messages)
       newMessage.push({
         userName: otherSideUserDetail.userName,

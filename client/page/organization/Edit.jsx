@@ -134,7 +134,6 @@ class OrgEdit extends Component {
     if (err) {
       return
     }
-    console.log(values)
     this.setState({
       loadingUser: true,
     })

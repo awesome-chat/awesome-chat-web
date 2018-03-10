@@ -81,7 +81,6 @@ class AttendanceList extends Component {
     if (err) {
       return
     }
-    console.log(values)
     api.getUserList({
       ...values
     }).then(({ data }) => {

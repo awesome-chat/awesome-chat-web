@@ -32,8 +32,6 @@ router.get('/:userId/after/:lastUpdateTime', (req, res) => {
         where: { roomId: Sequelize.col('room.roomId') }
       }]
     }).then((d) => {
-      console.log('--------------------')
-      console.log(JSON.parse(JSON.stringify(d)))
       res.send({
         code: 0,
         data: JSON.parse(JSON.stringify(d))

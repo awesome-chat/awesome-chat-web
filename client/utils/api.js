@@ -52,7 +52,6 @@ export default {
     return io.get(`/user/${userId}`).then(handleVerify);
   },
   addUser(data = {}) {
-    console.log('data', data)
     return io.post('/user', data).then(handleVerify);
   },
   updateUser(data = {}) {
@@ -81,18 +80,15 @@ export default {
     return io.get('/dep').then(handleVerify);
   },
   addDep(data = {}) {
-    console.log('data', data)
     return io.post('/dep', data).then(handleVerify);
   },
   updateDep(data = {}) {
-    console.log('data', data)
     return io.put('/dep', data).then(handleVerify);
   },
 
 
   // verify
   verifyAdmin(data = {}) {
-    console.log('data', data)
     return io.post('/verify/admin', data).then(handleVerify);
   },
 }

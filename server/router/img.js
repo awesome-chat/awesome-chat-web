@@ -13,7 +13,6 @@ router.post('/upload', (req, res) => {
       console.log(err)
       return
     }
-    console.log('files.images:', files.images)
     const pathArr = files.images.path.split('/')
     const fileName = pathArr[pathArr.length - 1]
     res.send({

@@ -21,7 +21,6 @@ router.post('/cottage', (req, res) => {
       [Sequelize.Op.or]: days
     }
   }).then((d) => {
-    console.log(d.length)
     if (d.length > 0) {
       res.send({
         code: 1,
@@ -74,7 +73,6 @@ router.post('/signin', (req, res) => {
       attendanceDate,
     }
   }).then((d) => {
-    console.log('ddddd:', d.length, d)
     if (d.length > 0) {
       res.send({
         code: 1,

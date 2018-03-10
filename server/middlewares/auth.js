@@ -27,7 +27,6 @@ module.exports = (req, res, next) => {
   if (authorization_admin) {
     try {
       const decoded = jwt.verify(authorization_admin, 'secret');
-      console.log('decoded', decoded)
     } catch (err) {
       console.log(err)
       res.send({

@@ -44,10 +44,8 @@ class AttendanceDetail extends Component {
   }
 
   onPanelChange = (value, mode) => {
-    console.log('onPanelChange:', value);
     const year = value.year()
     const month = value.month() + 1
-    console.log(year, month)
     this.fetchData(year, month)
   }
 
@@ -55,7 +53,6 @@ class AttendanceDetail extends Component {
     const { records } = this.state;
     const weekday = moment(value).weekday()
     const date = parseInt(moment(value).format('DD'), 10)
-    // console.log('value:', moment(value).format('YYYY MM DD'))
     // 排除周末
     const isNotWeekend = (weekday !== 5 && weekday !== 6)
     // 今天之前
@@ -64,7 +61,6 @@ class AttendanceDetail extends Component {
     const isStrike = records[date] && records[date].strikeTime
     // 是否请假
     const isCottage = records[date] && records[date].cottageReason
-    console.log(records, isNotWeekend, isBeforeToday, isStrike, isCottage)
 
     return (
       isNotWeekend && isBeforeToday ? (

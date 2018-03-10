@@ -17,8 +17,6 @@ router.post('/user', (req, res) => {
       'secret'
     );
     res.setHeader('authorization_user', token)
-    console.log('---------------------')
-    console.log('user:', user)
     res.send({
       code: 0,
       data: user
@@ -68,7 +66,6 @@ router.post('/admin', (req, res) => {
 
   // 管理员授权
   ep.on('authAdmin', (user) => {
-    console.log(user)
     jwt.sign(
       { exp: Math.floor(Date.now() / 1000) + (7 * 24 * 60 * 60) },
       'secret',
@@ -79,7 +76,6 @@ router.post('/admin', (req, res) => {
           })
           return
         }
-        console.log('token', token)
         res.setHeader('authorization_admin', token)
         res.send({
           code: 0,
