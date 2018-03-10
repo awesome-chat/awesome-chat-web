@@ -18,6 +18,7 @@ module.exports = (http) => {
       otherSideName,
       sysMessage,
       isPic,
+      isRecommend
     }) {
       if (!rooms[roomId]) {
         // room不存在的话就创建并添加
@@ -38,6 +39,7 @@ module.exports = (http) => {
         otherSideName,
         sysMessage: sysMessage ? 1 : 0,
         isPic: isPic ? 1 : 0,
+        isRecommend: isRecommend ? 1 : 0,
         createTime: Date.parse(new Date())
       });
     }
@@ -49,7 +51,8 @@ module.exports = (http) => {
       roomMemberId,
       createTime,
       sysMessage,
-      isPic
+      isPic,
+      isRecommend
     }) {
       Message.upsert({
         // 把聊天记录存在服务端
@@ -60,6 +63,7 @@ module.exports = (http) => {
         roomId,
         createTime,
         isPic: isPic ? 1 : 0,
+        isRecommend: isRecommend ? 1 : 0,
       }, {
         plain: true
       }).then((d) => {
@@ -91,8 +95,10 @@ module.exports = (http) => {
         content,
         createTime = Date.parse(new Date()),
         userName,
+        userAvatar,
         isGroup = false,
         isPic = false,
+        isRecommend = false
       } = data
       console.log('data', data)
 
@@ -102,6 +108,7 @@ module.exports = (http) => {
         const messageItem = _.cloneDeep(data)
         const otherMemberId = roomMemberId.split('-').filter(d => d !== String(userId))
         messageItem.otherMemberId = otherMemberId
+        messageItem.isRecommend = isRecommend
         let isAllOnline = true;
         let isAllOffline = true;
         otherMemberId.forEach((d) => {
@@ -124,10 +131,12 @@ module.exports = (http) => {
           saveToServer(messageItem)
         }
       } else {
+        console.log('单聊')
         // 单聊
         const otherSideId = roomMemberId.split('-').filter(d => d !== String(userId))[0]
         // 判断对方是否在线
         if (onlineUser[otherSideId]) {
+          console.log('在线')
           console.log('roomId', roomId, 'rooms', rooms)
           // 判断该房间是否存在
           if (!rooms[roomId]) {
@@ -144,17 +153,21 @@ module.exports = (http) => {
             roomId,
             roomMemberId,
             content,
+            otherSideAvatar: userAvatar,
             otherSideName: userName,
             isPic: isPic ? 1 : 0,
+            isRecommend: isRecommend ? 1 : 0,
             createTime: Date.parse(new Date())
           });
           // socket.emit('sys', content);
         } else {
-          console.log('offline')
+          console.log('不在线')
           Message.upsert({
             // 把聊天记录存在服务端
+            isRecommend: isRecommend ? 1 : 0,
             messageContent: content,
             messageFromId: userId,
+            otherSideAvatar: userAvatar,
             messageToId: roomMemberId,
             createTime,
             isPic: isPic ? 1 : 0,

@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
 
   User.findAll({
     where: queryConditions,
-    attributes: ['userName', 'userId', 'depId'],
+    attributes: ['userName', 'userAvatar', 'userId', 'depId'],
     include: [{
       model: Dep,
       where: { depId: Sequelize.col('dep.depId') }
@@ -52,7 +52,7 @@ router.get('/:userId', (req, res) => {
         },
         include: [{
           model: User,
-          attributes: ['userName', 'userId'],
+          attributes: ['userName', 'userId', 'userAvatar'],
           where: { depOwnerId: Sequelize.col('user.userId') }
         }]
       }).then((d) => {
@@ -65,7 +65,7 @@ router.get('/:userId', (req, res) => {
     } else {
       // 非部门负责人
       User.findAll({
-        attributes: ['userId', 'userName'],
+        attributes: ['userId', 'userName', 'userAvatar'],
         where: {
           userId: user.dep.depOwnerId
         },
@@ -114,7 +114,7 @@ router.get('/search/:value', (req, res) => {
         },
       ]
     },
-    attributes: ['userMisId','userName','userId'],
+    attributes: ['userMisId','userName','userId', 'userAvatar'],
   }).then((d) => {
     res.send({
       code: 0,
@@ -132,6 +132,7 @@ router.post('/', (req, res) => {
     userTel: body.userTel,
     depId: body.depId || null,
     companyId: 1,
+    userRegisterTime: Date.parse(new Date())
   }).then((d) => {
     res.send({
       code: 0,

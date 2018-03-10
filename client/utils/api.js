@@ -59,6 +59,10 @@ export default {
     return io.put('/user', data).then(handleVerify);
   },
 
+  createRoom(data = {}) {
+    return io.post('/room/create', data).then(handleVerify);
+  },
+
   getAttendance(data = {}) {
     return io.post('/attendance/detail', data).then(handleVerify);
   },

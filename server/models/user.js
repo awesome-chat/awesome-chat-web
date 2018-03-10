@@ -20,6 +20,7 @@ const user = sequelize.define('user', {
   userSex: Sequelize.BIGINT(11),
   companyId: Sequelize.BIGINT(11),
   depId: Sequelize.BIGINT(11),
+  userRegisterTime: Sequelize.STRING(255),
 }, {
   timestamps: false
 });

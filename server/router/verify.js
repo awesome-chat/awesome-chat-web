@@ -17,6 +17,8 @@ router.post('/user', (req, res) => {
       'secret'
     );
     res.setHeader('authorization_user', token)
+    console.log('---------------------')
+    console.log('user:', user)
     res.send({
       code: 0,
       data: user
@@ -24,12 +26,31 @@ router.post('/user', (req, res) => {
   });
 
   User.findAll({
-    attributes: ['userAvatar', 'userName', 'userMisId', 'userMisId', 'userSex', 'userId', 'userTel', 'userSign', 'userWorkPlace', 'userExt'],
+    attributes: [
+      'userAvatar',
+      'userName',
+      'userMisId',
+      'userMisId',
+      'userSex',
+      'userId',
+      'userTel',
+      'userSign',
+      'userWorkPlace',
+      'userExt',
+      'userRegisterTime',
+      'lastUpdateTime'
+    ],
     where: {
       userMisId,
       userPwd
     }
   }).then((d) => {
+    User.update({
+      lastUpdateTime: Date.parse(new Date())
+    }, {
+      where: { userMisId },
+      plain: true
+    })
     if (d.length > 0) {
       ep.emit('authUser', JSON.parse(JSON.stringify(d[0])));
     } else {

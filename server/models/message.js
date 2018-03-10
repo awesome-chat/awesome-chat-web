@@ -9,12 +9,14 @@ const message = sequelize.define('message', {
     unique: true,
     autoIncrement: true
   },
+  otherSideAvatar: Sequelize.STRING(255),
   messageContent: Sequelize.STRING(255),
   messageFromId: Sequelize.BIGINT(11),
   messageToId: Sequelize.STRING(255),
   createTime: Sequelize.BIGINT(20),
   isPic: Sequelize.BIGINT(11),
   roomId: Sequelize.BIGINT(11),
+  isRecommend: Sequelize.BIGINT(11),
 }, {
   timestamps: false
 });
