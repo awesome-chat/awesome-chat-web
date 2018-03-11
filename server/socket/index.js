@@ -1,5 +1,5 @@
 const socketIo = require('socket.io')
-const { Message, RoomToUser, Room } = require('../models')
+const { Message, RoomToUser, Room, User } = require('../models')
 const _ = require('lodash')
 const eventproxy = require('eventproxy')
 
@@ -75,6 +75,7 @@ module.exports = (http) => {
 
     // 初始化userId
     let currentUserId;
+    let joinRoomIds = [];
 
     // 上线
     socket.on('online', (userId) => {
@@ -100,7 +101,8 @@ module.exports = (http) => {
         isPic = false,
         isRecommend = false
       } = data
-      console.log('data', data)
+
+      joinRoomIds.push(roomId);
 
       if (isGroup) {
         // 群聊
@@ -184,8 +186,26 @@ module.exports = (http) => {
 
     // 关闭
     socket.on('disconnect', () => {
+      if (currentUserId) {
+        delete onlineUser[currentUserId]
+        // 离开所有房间
+        joinRoomIds.forEach((d) => {
+          socket.leave(d)
+        })
+        // 更新下线时间
+        User.update({
+          lastUpdateTime: Date.parse(new Date())
+        }, {
+          where: { userId: currentUserId },
+          plain: true
+        }).then((d) => {
+          console.log('some leave:', currentUserId);
+        }).catch((err) => {
+          console.log(err)
+        })
+        return
+      }
       console.log('some leave:', currentUserId);
-      delete onlineUser[currentUserId]
     });
   });
 }

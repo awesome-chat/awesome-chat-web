@@ -48,6 +48,8 @@ router.post('/user', (req, res) => {
     }, {
       where: { userMisId },
       plain: true
+    }).catch((err) => {
+      console.log(err)
     })
     if (d.length > 0) {
       ep.emit('authUser', JSON.parse(JSON.stringify(d[0])));

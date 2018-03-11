@@ -21,6 +21,7 @@ const user = sequelize.define('user', {
   companyId: Sequelize.BIGINT(11),
   depId: Sequelize.BIGINT(11),
   userRegisterTime: Sequelize.STRING(255),
+  lastUpdateTime: Sequelize.STRING(255),
 }, {
   timestamps: false
 });
