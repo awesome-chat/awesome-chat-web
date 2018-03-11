@@ -15,6 +15,7 @@ const message = sequelize.define('message', {
   messageToId: Sequelize.STRING(255),
   createTime: Sequelize.BIGINT(20),
   isPic: Sequelize.BIGINT(11),
+  isGroup: Sequelize.BIGINT(11),
   roomId: Sequelize.BIGINT(11),
   isRecommend: Sequelize.BIGINT(11),
 }, {

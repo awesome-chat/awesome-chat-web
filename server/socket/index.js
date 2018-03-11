@@ -3,7 +3,6 @@ const { Message, RoomToUser, Room, User } = require('../models')
 const _ = require('lodash')
 const eventproxy = require('eventproxy')
 
-const rooms = {}
 const onlineUser = {}
 
 module.exports = (http) => {
@@ -20,10 +19,6 @@ module.exports = (http) => {
       isPic,
       isRecommend
     }) {
-      if (!rooms[roomId]) {
-        // room不存在的话就创建并添加
-        rooms[roomId] = {}
-      }
       socket.join(roomId)
       otherMemberId.forEach((d) => {
         if (onlineUser[d]) {
@@ -62,6 +57,7 @@ module.exports = (http) => {
         messageToId: roomMemberId,
         roomId,
         createTime,
+        isGroup: 1,
         isPic: isPic ? 1 : 0,
         isRecommend: isRecommend ? 1 : 0,
       }, {
@@ -139,16 +135,10 @@ module.exports = (http) => {
         // 判断对方是否在线
         if (onlineUser[otherSideId]) {
           console.log('在线')
-          console.log('roomId', roomId, 'rooms', rooms)
-          // 判断该房间是否存在
-          if (!rooms[roomId]) {
-            rooms[roomId] = {}
-          }
           // 将两人加入聊天室
           socket.join(roomId)
           onlineUser[otherSideId].join(roomId)
           // 表示该用户在线
-          rooms[roomId][userId] = true
           console.log('broadcast success')
           socket.broadcast.to(roomId).emit('sys', {
             code: 0,
