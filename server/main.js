@@ -40,6 +40,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use((req, res, next) => auth(req, res, next))
 
 router(app)
+
 if (process.env.NODE_ENV === 'development') {
   watch([
     require.resolve('./middlewares/auth'),
