@@ -3,6 +3,7 @@ const chokidar = require('chokidar');
 
 const staticDir = path.join(__dirname, '../../static')
 const buildDir = path.join(__dirname, '../../build')
+
 let company = require('./company')
 let user = require('./user')
 let dep = require('./dep')

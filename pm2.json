@@ -5,7 +5,8 @@
     "env": {
       "COMMON_VARIABLE": "true",
       "NODE_ENV": "production",
-      "BABEL_DISABLE_CACHE": 1
+      "BABEL_DISABLE_CACHE": 1,
+      "PM2_SERVE_PORT": 3000
     },
     "exec_interpreter"   : "node",
     "node_args"          : "--harmony",

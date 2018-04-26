@@ -11,6 +11,7 @@ module.exports = (req, res, next) => {
   const skipPaths = [
     /^\/verify/,
     /^\/static/,
+    /^\/build/,
     /^\/$/
   ];
 
